@@ -3,124 +3,113 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Ödev Takip V2</title>
+  <title>Ödev Takip iOS Edition</title>
   <style>
     :root {
       --bg: #f2f2f7;
-      --card-bg: rgba(255, 255, 255, 0.82);
+      --card-bg: rgba(255, 255, 255, 0.75);
       --card-solid: #ffffff;
       --text: #000000;
       --sub-text: #8e8e93;
       --accent: #007aff;
+      --green: #34c759;
       --red: #ff3b30;
       --orange: #ff9500;
-      --blue: #5ac8fa;
-      --green: #34c759;
-      --border: rgba(60, 60, 67, 0.12);
+      --border: rgba(60, 60, 67, 0.08);
       --input-bg: rgba(118, 118, 128, 0.12);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
     }
 
     [data-theme="dark"] {
       --bg: #000000;
-      --card-bg: rgba(28, 28, 30, 0.82);
+      --card-bg: rgba(28, 28, 30, 0.75);
       --card-solid: #1c1c1e;
       --text: #ffffff;
       --sub-text: #8e8e93;
       --accent: #0a84ff;
-      --border: rgba(255, 255, 255, 0.15);
+      --border: rgba(255, 255, 255, 0.12);
       --input-bg: rgba(118, 118, 128, 0.24);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 120px; transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .app { max-width: 600px; margin: 0 auto; padding: 16px; }
 
-    /* Header & Streak */
-    .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; padding: 0 4px; }
-    .greeting { font-size: 13px; color: var(--sub-text); font-weight: 600; text-transform: uppercase; letter-spacing: -0.2px; }
-    .app-title { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin-top: 2px; }
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; padding-top: 8px; }
+    .greeting { font-size: 12px; color: var(--sub-text); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .app-title { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-top: 2px; }
     
-    .streak-badge { background: linear-gradient(135deg, #ff9500, #ff3b30); color: white; padding: 8px 14px; border-radius: 22px; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 16px rgba(255, 149, 0, 0.35); transition: transform 0.2s; }
-    .streak-badge:active { transform: scale(0.95); }
+    .streak-badge { background: linear-gradient(135deg, #ff9500, #ff2d55); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(255, 149, 0, 0.35); }
 
-    /* Glassmorphism Summary Cards */
+    /* Summary Grid */
     .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
-    .summary-card { background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; border: 0.5px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.03); cursor: pointer; transition: all 0.2s ease; }
+    .summary-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); padding: 16px; border-radius: 22px; display: flex; align-items: center; justify-content: space-between; border: 0.5px solid var(--border); cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); }
     .summary-card:active { transform: scale(0.96); }
-    .summary-card.active { border-color: var(--accent); background: var(--card-solid); }
-    .summary-info span { font-size: 12px; color: var(--sub-text); font-weight: 600; display: block; margin-bottom: 2px; }
-    .summary-info b { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-    .badge-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    
-    .bg-red { background: rgba(255, 59, 48, 0.15); }
-    .bg-orange { background: rgba(255, 149, 0, 0.15); }
-    .bg-blue { background: rgba(90, 200, 250, 0.15); }
-    .bg-green { background: rgba(52, 199, 89, 0.15); }
+    .summary-card.active-filter { border: 2px solid var(--accent); }
+    .summary-info span { font-size: 12px; color: var(--sub-text); font-weight: 600; display: block; }
+    .summary-info b { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+    .badge-icon { width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .bg-red { background: rgba(255, 59, 48, 0.12); }
+    .bg-orange { background: rgba(255, 149, 0, 0.12); }
+    .bg-blue { background: rgba(0, 122, 255, 0.12); }
+    .bg-green { background: rgba(52, 199, 89, 0.12); }
 
-    /* Search & Filters */
-    .search-box { position: relative; margin-bottom: 12px; }
-    .search-box input { width: 100%; padding: 12px 16px 12px 38px; border-radius: 14px; border: 0.5px solid var(--border); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text); font-size: 15px; outline: none; }
-    .search-box::before { content: "🔍"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.6; }
+    /* Inputs & Filters */
+    .search-box input { width: 100%; padding: 14px 18px; border-radius: 16px; border: 0.5px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 15px; outline: none; margin-bottom: 14px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: var(--shadow); }
     
-    .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 18px; scrollbar-width: none; }
-    .filter-chip { background: var(--card-bg); color: var(--sub-text); border: 0.5px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: all 0.2s; }
-    .filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-chip { background: var(--card-bg); color: var(--sub-text); border: 0.5px solid var(--border); padding: 9px 18px; border-radius: 22px; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(20px); }
+    .filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
 
-    /* Task Card (Apple Style List) */
-    .task-card { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 20px; padding: 16px; margin-bottom: 12px; border: 0.5px solid var(--border); box-shadow: 0 4px 16px rgba(0,0,0,0.02); display: flex; gap: 14px; align-items: center; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
-    .task-card.completed-card { opacity: 0.6; background: rgba(120, 120, 128, 0.08); }
+    /* Task Card */
+    .task-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 22px; padding: 18px; margin-bottom: 14px; border: 0.5px solid var(--border); display: flex; gap: 14px; align-items: center; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); }
+    .task-card.completed-card { opacity: 0.45; }
     
-    /* Quick Check Circle (Tek Tıkla Tamamlama) */
-    .check-btn { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--sub-text); background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: white; transition: all 0.2s; }
+    .check-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--sub-text); background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: white; transition: all 0.2s; }
     .check-btn.checked { background: var(--green); border-color: var(--green); }
 
     .task-body { flex: 1; min-width: 0; cursor: pointer; }
     .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     .subject-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
     .pub-tag { font-size: 12px; font-weight: 700; color: var(--sub-text); }
-    .task-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .task-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
     .task-title.strike { text-decoration: line-through; opacity: 0.8; }
     .task-meta { display: flex; gap: 12px; font-size: 12px; color: var(--sub-text); margin-bottom: 10px; font-weight: 500; }
     
-    .progress-bar-bg { background: var(--input-bg); height: 6px; border-radius: 3px; overflow: hidden; }
-    .progress-bar-fill { background: var(--accent); height: 100%; border-radius: 3px; transition: width 0.3s; }
-    .progress-text { display: flex; justify-content: space-between; font-size: 11px; color: var(--sub-text); margin-top: 5px; font-weight: 600; }
+    .progress-bar-bg { background: var(--input-bg); height: 7px; border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { background: var(--accent); height: 100%; border-radius: 4px; transition: width 0.3s ease; }
+    .progress-text { display: flex; justify-content: space-between; font-size: 11px; color: var(--sub-text); margin-top: 6px; font-weight: 700; }
 
-    /* Modals & Forms */
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
+    /* Modal */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: flex-end; justify-content: center; z-index: 100; transition: all 0.3s; }
     .modal.active { display: flex; }
-    .modal-content { background: var(--card-solid); width: 100%; max-width: 600px; border-radius: 28px 28px 0 0; padding: 24px; max-height: 88vh; overflow-y: auto; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); border-top: 0.5px solid var(--border); }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .modal-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .modal-content { background: var(--card-solid); width: 100%; max-width: 600px; border-radius: 32px 32px 0 0; padding: 26px; max-height: 90vh; overflow-y: auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
     .close-btn { background: var(--input-bg); border: none; width: 32px; height: 32px; border-radius: 50%; color: var(--sub-text); font-weight: 700; cursor: pointer; }
 
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--sub-text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-control { width: 100%; padding: 14px; border-radius: 14px; border: 0.5px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 16px; outline: none; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-    .btn-primary { background: var(--accent); color: white; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--sub-text); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-control { width: 100%; padding: 15px; border-radius: 16px; border: 0.5px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 16px; outline: none; }
+    
+    .btn { width: 100%; padding: 16px; border-radius: 18px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3); }
     .btn-danger { background: rgba(255, 59, 48, 0.12); color: var(--red); margin-top: 10px; }
 
-    .counter-grid { display: flex; gap: 8px; margin: 16px 0; }
-    .btn-counter { flex: 1; padding: 14px; background: var(--input-bg); border: none; border-radius: 12px; font-weight: 800; color: var(--text); font-size: 16px; cursor: pointer; }
+    .counter-grid { display: flex; gap: 8px; margin: 18px 0; }
+    .btn-counter { flex: 1; padding: 14px; background: var(--input-bg); border: none; border-radius: 14px; font-weight: 800; color: var(--text); font-size: 16px; cursor: pointer; }
 
-    /* Toast Bar */
-    .toast { position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%); background: #2c2c2e; color: white; padding: 12px 22px; border-radius: 30px; display: none; align-items: center; gap: 14px; font-size: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 200; border: 0.5px solid rgba(255,255,255,0.1); }
-    .toast button { background: none; border: none; color: var(--orange); font-weight: 800; cursor: pointer; }
-
-    /* Floating Navbar */
-    .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-top: 0.5px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0 24px 0; max-width: 600px; margin: 0 auto; z-index: 90; }
-    .nav-item { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--sub-text); font-size: 10px; font-weight: 600; cursor: pointer; width: 25%; }
+    /* Navbar */
+    .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 0.5px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0 28px 0; max-width: 600px; margin: 0 auto; z-index: 90; }
+    .nav-item { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--sub-text); font-size: 10px; font-weight: 700; cursor: pointer; width: 25%; }
     .nav-item.active { color: var(--accent); }
     .nav-item span { font-size: 22px; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .empty-state { text-align: center; padding: 48px 20px; color: var(--sub-text); font-size: 15px; }
   </style>
 </head>
 <body>
@@ -140,118 +129,106 @@
 
       <!-- Özet Sayaçlar -->
       <div class="summary-grid">
-        <div class="summary-card" onclick="applyStatusFilter('overdue')">
+        <div class="summary-card" id="card-overdue" onclick="applyStatusFilter('overdue')">
           <div class="summary-info"><span>Geciken</span><b id="cnt-overdue">0</b></div>
           <div class="badge-icon bg-red">🔴</div>
         </div>
-        <div class="summary-card" onclick="applyStatusFilter('today')">
+        <div class="summary-card" id="card-today" onclick="applyStatusFilter('today')">
           <div class="summary-info"><span>Bugün</span><b id="cnt-today">0</b></div>
           <div class="badge-icon bg-orange">🟠</div>
         </div>
-        <div class="summary-card" onclick="applyStatusFilter('upcoming')">
+        <div class="summary-card" id="card-upcoming" onclick="applyStatusFilter('upcoming')">
           <div class="summary-info"><span>Yaklaşan</span><b id="cnt-upcoming">0</b></div>
           <div class="badge-icon bg-blue">🔵</div>
         </div>
-        <div class="summary-card" onclick="applyStatusFilter('completed')">
+        <div class="summary-card" id="card-completed" onclick="applyStatusFilter('completed')">
           <div class="summary-info"><span>Tamamlanan</span><b id="cnt-completed">0</b></div>
           <div class="badge-icon bg-green">🟢</div>
         </div>
       </div>
 
-      <!-- Arama ve Filtreler -->
       <div class="search-box">
-        <input type="text" id="search-input" placeholder="Yayın, konu veya ders ara..." oninput="renderTasks()">
+        <input type="text" id="search-input" placeholder="Ders, yayın veya konu ara..." oninput="renderTasks()">
       </div>
 
+      <!-- İstediğin Alan ve Ders Filtreleri -->
       <div class="filters" id="subject-filters">
         <button class="filter-chip active" onclick="setSubjectFilter('Tümü', this)">Tümü</button>
+        <button class="filter-chip" onclick="setSubjectFilter('Sayısal', this)">Sayısal</button>
+        <button class="filter-chip" onclick="setSubjectFilter('Eşit Ağırlık', this)">Eşit Ağırlık</button>
         <button class="filter-chip" onclick="setSubjectFilter('Matematik', this)">Matematik</button>
-        <button class="filter-chip" onclick="setSubjectFilter('Fizik', this)">Fizik</button>
         <button class="filter-chip" onclick="setSubjectFilter('Türkçe', this)">Türkçe</button>
-        <button class="filter-chip" onclick="setSubjectFilter('Kimya', this)">Kimya</button>
       </div>
 
-      <!-- Ödev Listesi -->
       <div id="task-list"></div>
     </section>
 
     <!-- 📊 İSTATİSTİK -->
     <section id="tab-stats" class="tab-content">
       <header class="header"><h1 class="app-title">İstatistikler</h1></header>
-      <div class="summary-card" style="flex-direction:column; text-align:center; padding: 32px 20px;">
-        <h3 style="color: var(--sub-text); font-size: 13px; text-transform: uppercase;">Tamamlanma Oranı</h3>
-        <h2 id="stats-pct" style="font-size: 52px; font-weight:800; color: var(--accent); margin: 8px 0;">%0</h2>
-        <p style="color: var(--sub-text);" id="stats-detail">0 ödevden 0 tanesi tamamlandı.</p>
+      <div class="summary-card" style="flex-direction:column; text-align:center; padding: 36px 20px; cursor:default;">
+        <h3 style="color: var(--sub-text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Genel Tamamlanma</h3>
+        <h2 id="stats-pct" style="font-size: 56px; font-weight:800; color: var(--accent); margin: 8px 0; letter-spacing: -1px;">%0</h2>
+        <p style="color: var(--sub-text); font-weight: 500;" id="stats-detail">0 ödevden 0 tanesi tamamlandı.</p>
       </div>
     </section>
 
     <!-- ⚙️ AYARLAR -->
     <section id="tab-settings" class="tab-content">
       <header class="header"><h1 class="app-title">Ayarlar</h1></header>
-      <div class="summary-card" style="flex-direction:column; align-items:stretch; gap: 16px;">
+      <div class="summary-card" style="flex-direction:column; align-items:stretch; gap: 16px; cursor:default;">
         <div class="form-group">
           <label>Kullanıcı Adın</label>
-          <input type="text" id="inp-username" class="form-control" placeholder="İsmini gir..." onchange="saveUsername(this.value)">
+          <input type="text" id="inp-username" class="form-control" placeholder="Adını yaz..." onchange="saveUsername(this.value)">
         </div>
-        <button class="btn btn-primary" onclick="toggleTheme()">🌙 Tema Değiştir (Açık / Koyu)</button>
+        <button class="btn btn-primary" onclick="toggleTheme()">🌙 Tema Değiştir</button>
       </div>
     </section>
   </main>
 
-  <!-- Toast -->
-  <div class="toast" id="toast">
-    <span>Ödev silindi.</span>
-    <button onclick="undoDelete()">Geri Al</button>
-  </div>
-
-  <!-- ➕ Ödev Ekle Modalı -->
+  <!-- ➕ ÖDEV EKLE MODAL -->
   <div class="modal" id="add-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Yeni Ödev Ekle</h2>
+        <h2>Yeni Ödev Ekle</h2>
         <button class="close-btn" onclick="closeModal('add-modal')">✕</button>
       </div>
-      <form id="add-form" onsubmit="saveTask(event)">
+      <form onsubmit="saveTask(event)">
         <div class="form-group">
           <label>Ders</label>
           <select id="inp-subject" class="form-control" required>
             <option value="Matematik">Matematik</option>
             <option value="Fizik">Fizik</option>
-            <option value="Türkçe">Türkçe</option>
             <option value="Kimya">Kimya</option>
             <option value="Biyoloji">Biyoloji</option>
+            <option value="Türkçe">Türkçe</option>
+            <option value="Edebiyat">Edebiyat</option>
+            <option value="Tarih">Tarih</option>
+            <option value="Coğrafya">Coğrafya</option>
             <option value="Diğer">Diğer</option>
           </select>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>Yayın</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345" required></div>
-          <div class="form-group"><label>Konu</label><input type="text" id="inp-topic" class="form-control" placeholder="Örn: Bölme" required></div>
-        </div>
-        <div class="form-group">
-          <label>Sayfa / Test Aralığı</label>
-          <input type="text" id="inp-range" class="form-control" placeholder="Örn: 100-150" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Verilen Tarih</label><input type="date" id="inp-assigned" class="form-control" required></div>
-          <div class="form-group"><label>Son Teslim</label><input type="date" id="inp-due" class="form-control" required></div>
-        </div>
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Ödevi Ekle</button>
+        <div class="form-group"><label>Yayın</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345" required></div>
+        <div class="form-group"><label>Konu</label><input type="text" id="inp-topic" class="form-control" placeholder="Örn: Türev - İntegral" required></div>
+        <div class="form-group"><label>Sayfa veya Test Miktarı</label><input type="text" id="inp-range" class="form-control" placeholder="Örn: 100-150 veya 3 test" required></div>
+        <div class="form-group"><label>Son Teslim Tarihi</label><input type="date" id="inp-due" class="form-control" required></div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
       </form>
     </div>
   </div>
 
-  <!-- 👆 Detay Modalı -->
+  <!-- 👆 DETAY MODAL -->
   <div class="modal" id="detail-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" id="det-title">Detay</h2>
+        <h2 id="det-title">Detay</h2>
         <button class="close-btn" onclick="closeModal('detail-modal')">✕</button>
       </div>
-      <div style="color: var(--sub-text); font-size: 14px; margin-bottom: 16px;" id="det-meta"></div>
+      <div style="color: var(--sub-text); font-size: 14px; margin-bottom: 18px; font-weight: 500;" id="det-meta"></div>
       
       <div class="form-group">
-        <label>Yapılan Sayfa / Birim</label>
-        <input type="number" id="det-completed" class="form-control" onchange="updateDetailProgress(this.value)">
+        <label id="det-input-label">Tamamlanan Miktar</label>
+        <input type="number" id="det-completed" class="form-control">
       </div>
 
       <div class="counter-grid">
@@ -275,49 +252,57 @@
   </nav>
 
   <script>
-    const STORAGE_KEY = "odev_takip_v2_data";
-    const USER_KEY = "odev_takip_username";
+    const DB_NAME = "odev_app_v3_0";
     let tasks = [];
     let selectedSubject = "Tümü";
     let selectedStatusFilter = null;
     let currentDetailId = null;
-    let lastDeletedTask = null;
-    let toastTimeout = null;
+
+    // Ders Grupları Tanımlamaları
+    const SAYISAL_DERSLER = ["Matematik", "Fizik", "Kimya", "Biyoloji"];
+    const ESIT_AGIRLIK_DERSLER = ["Matematik", "Türkçe", "Edebiyat", "Tarih", "Coğrafya"];
 
     function init() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      if (data) tasks = JSON.parse(data);
-
-      const username = localStorage.getItem(USER_KEY) || "";
-      if (username) {
-        document.getElementById('user-greeting').innerText = `Hoş Geldin, ${username} 👋`;
-        document.getElementById('inp-username').value = username;
+      try {
+        tasks = JSON.parse(localStorage.getItem(DB_NAME) || "[]");
+      } catch (e) {
+        tasks = [];
       }
 
-      document.getElementById('inp-assigned').valueAsDate = new Date();
-      document.getElementById('inp-due').valueAsDate = new Date();
+      const name = localStorage.getItem("odev_user") || "";
+      if (name) {
+        document.getElementById('user-greeting').innerText = `Hoş Geldin, ${name} 👋`;
+        document.getElementById('inp-username').value = name;
+      }
+      
+      const dueInp = document.getElementById('inp-due');
+      if (dueInp) dueInp.valueAsDate = new Date();
 
-      renderDashboard();
-      renderTasks();
-      calculateStreak();
-    }
-
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-      renderDashboard();
-      calculateStreak();
+      saveData();
     }
 
     function saveUsername(val) {
-      localStorage.setItem(USER_KEY, val.trim());
+      localStorage.setItem("odev_user", val.trim());
       document.getElementById('user-greeting').innerText = val.trim() ? `Hoş Geldin, ${val.trim()} 👋` : "Hoş Geldin 👋";
     }
 
-    function parseTotalPages(rangeStr) {
-      const match = rangeStr.match(/(\d+)\s*[-–]\s*(\d+)/);
-      if (match) return Math.abs(parseInt(match[2]) - parseInt(match[1])) + 1;
-      const single = rangeStr.match(/\d+/);
-      return single ? parseInt(single[0]) : 10;
+    function parseAmountAndUnit(rangeStr) {
+      if (!rangeStr) return { total: 10, unit: "sayfa" };
+      const str = rangeStr.toLowerCase().trim();
+      const isTest = str.includes("test");
+      const unit = isTest ? "test" : "sayfa";
+
+      const matchRange = str.match(/(\d+)\s*[-–]\s*(\d+)/);
+      if (matchRange) {
+        const start = parseInt(matchRange[1]);
+        const end = parseInt(matchRange[2]);
+        const total = Math.abs(end - start) + 1;
+        return { total, unit };
+      }
+
+      const matchSingle = str.match(/\d+/);
+      const total = matchSingle ? parseInt(matchSingle[0]) : 10;
+      return { total, unit };
     }
 
     function getTaskCategory(t) {
@@ -328,9 +313,8 @@
       return "upcoming";
     }
 
-    // ⚡ Tek Tıkla Tamamlama
-    function toggleTaskComplete(id, event) {
-      event.stopPropagation();
+    function toggleTask(id, e) {
+      if (e) e.stopPropagation();
       const t = tasks.find(x => x.id === id);
       if (t) {
         t.completed = !t.completed;
@@ -339,41 +323,36 @@
           t.completedAt = new Date().toISOString().split('T')[0];
         } else {
           t.completedCount = 0;
+          t.completedAt = null;
         }
         saveData();
-        renderTasks();
       }
     }
 
-    // 🔥 Otomatik Seri (Streak) Algoritması
     function calculateStreak() {
-      const completedDates = [...new Set(
-        tasks.filter(t => t.completed && t.completedAt)
-             .map(t => t.completedAt)
-      )].sort().reverse();
-
-      if (!completedDates.length) {
-        document.getElementById('streak-count').innerText = "0";
-        return;
-      }
-
+      const dates = [...new Set(tasks.filter(t => t.completed && t.completedAt).map(t => t.completedAt))].sort().reverse();
       let streak = 0;
-      let checkDate = new Date();
+      let check = new Date();
 
       for (let i = 0; i < 30; i++) {
-        const dateStr = checkDate.toISOString().split('T')[0];
-        if (completedDates.includes(dateStr)) {
+        const dStr = check.toISOString().split('T')[0];
+        if (dates.includes(dStr)) {
           streak++;
-          checkDate.setDate(checkDate.getDate() - 1);
+          check.setDate(check.getDate() - 1);
         } else if (i === 0) {
-          // Bugün henüz bitirmediyse dünü kontrol et
-          checkDate.setDate(checkDate.getDate() - 1);
+          check.setDate(check.getDate() - 1);
         } else {
           break;
         }
       }
-
       document.getElementById('streak-count').innerText = streak;
+    }
+
+    function saveData() {
+      localStorage.setItem(DB_NAME, JSON.stringify(tasks));
+      renderDashboard();
+      renderTasks();
+      calculateStreak();
     }
 
     function renderDashboard() {
@@ -394,26 +373,36 @@
 
     function renderTasks() {
       const container = document.getElementById('task-list');
-      const search = document.getElementById('search-input').value.toLowerCase();
+      const search = (document.getElementById('search-input').value || "").toLowerCase();
 
       let filtered = tasks.filter(t => {
-        const matchesSubject = selectedSubject === "Tümü" || t.subject === selectedSubject;
-        const matchesSearch = t.topic.toLowerCase().includes(search) || t.publisher.toLowerCase().includes(search);
+        // Ders / Alan Filtre Mantığı
+        let matchesSubject = false;
+        if (selectedSubject === "Tümü") matchesSubject = true;
+        else if (selectedSubject === "Sayısal") matchesSubject = SAYISAL_DERSLER.includes(t.subject);
+        else if (selectedSubject === "Eşit Ağırlık") matchesSubject = ESIT_AGIRLIK_DERSLER.includes(t.subject);
+        else matchesSubject = t.subject === selectedSubject;
+
+        const matchesSearch = (t.topic || "").toLowerCase().includes(search) || (t.publisher || "").toLowerCase().includes(search);
         const matchesStatus = !selectedStatusFilter || getTaskCategory(t) === selectedStatusFilter;
         return matchesSubject && matchesSearch && matchesStatus;
       });
 
       if (!filtered.length) {
-        container.innerHTML = `<div class="empty-state">🎉 Gösterilecek ödev bulunamadı.</div>`;
+        container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--sub-text); font-weight:600;">Gösterilecek ödev bulunamadı.</div>`;
         return;
       }
 
       container.innerHTML = filtered.map(t => {
         const isDone = t.completed || t.completedCount >= t.totalCount;
-        const pct = Math.min(100, Math.round((t.completedCount / t.totalCount) * 100));
+        const total = t.totalCount || 10;
+        const current = t.completedCount || 0;
+        const pct = Math.min(100, Math.round((current / total) * 100));
+        const unitText = t.unit || "sayfa";
+
         return `
           <div class="task-card ${isDone ? 'completed-card' : ''}">
-            <button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleTaskComplete('${t.id}', event)">
+            <button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleTask('${t.id}', event)">
               ${isDone ? '✓' : ''}
             </button>
             <div class="task-body" onclick="openDetailModal('${t.id}')">
@@ -423,14 +412,14 @@
               </div>
               <div class="task-title ${isDone ? 'strike' : ''}">${t.topic}</div>
               <div class="task-meta">
-                <span>📖 Sayfa ${t.pageRange}</span>
-                <span>📅 ${t.dueDate.split('-').reverse().slice(0,2).join('/')}</span>
+                <span>📖 ${t.range}</span>
+                <span>📅 ${(t.dueDate || '').split('-').reverse().slice(0,2).join('/')}</span>
               </div>
               <div class="progress-bar-bg">
                 <div class="progress-bar-fill" style="width: ${pct}%"></div>
               </div>
               <div class="progress-text">
-                <span>${t.completedCount} / ${t.totalCount} sayfa</span>
+                <span>${current} / ${total} ${unitText}</span>
                 <span>%${pct}</span>
               </div>
             </div>
@@ -445,22 +434,22 @@
     function saveTask(e) {
       e.preventDefault();
       const range = document.getElementById('inp-range').value;
-      const newTask = {
+      const parsed = parseAmountAndUnit(range);
+
+      tasks.push({
         id: Date.now().toString(),
         subject: document.getElementById('inp-subject').value,
         publisher: document.getElementById('inp-publisher').value,
         topic: document.getElementById('inp-topic').value,
-        pageRange: range,
-        totalCount: parseTotalPages(range),
+        range: range,
+        totalCount: parsed.total,
+        unit: parsed.unit,
         completedCount: 0,
-        assignedDate: document.getElementById('inp-assigned').value,
         dueDate: document.getElementById('inp-due').value,
         completed: false
-      };
+      });
 
-      tasks.push(newTask);
       saveData();
-      renderTasks();
       closeModal('add-modal');
       e.target.reset();
     }
@@ -470,19 +459,22 @@
       const t = tasks.find(x => x.id === id);
       if (!t) return;
 
+      const unitText = t.unit || "sayfa";
       document.getElementById('det-title').innerText = `${t.subject} — ${t.topic}`;
       document.getElementById('det-meta').innerText = `Yayın: ${t.publisher} • Son Tarih: ${t.dueDate}`;
-      document.getElementById('det-completed').value = t.completedCount;
+      document.getElementById('det-input-label').innerText = `TAMAMLANAN ${unitText.toUpperCase()} SAYISI`;
+      document.getElementById('det-completed').value = t.completedCount || 0;
       document.getElementById('detail-modal').classList.add('active');
     }
 
     function adjustProgress(delta) {
+      const inp = document.getElementById('det-completed');
+      let val = (parseInt(inp.value) || 0) + delta;
       const t = tasks.find(x => x.id === currentDetailId);
-      if (!t) return;
-      t.completedCount = Math.max(0, Math.min(t.totalCount, t.completedCount + delta));
-      t.completed = t.completedCount >= t.totalCount;
-      if (t.completed) t.completedAt = new Date().toISOString().split('T')[0];
-      document.getElementById('det-completed').value = t.completedCount;
+      if (t) {
+        val = Math.max(0, Math.min(t.totalCount, val));
+      }
+      inp.value = val;
     }
 
     function saveDetailEdit() {
@@ -491,8 +483,8 @@
         t.completedCount = parseInt(document.getElementById('det-completed').value) || 0;
         t.completed = t.completedCount >= t.totalCount;
         if (t.completed) t.completedAt = new Date().toISOString().split('T')[0];
+        else t.completedAt = null;
         saveData();
-        renderTasks();
         closeModal('detail-modal');
       }
     }
@@ -500,29 +492,9 @@
     function deleteCurrentTask() {
       const idx = tasks.findIndex(x => x.id === currentDetailId);
       if (idx > -1) {
-        lastDeletedTask = { task: tasks[idx], index: idx };
         tasks.splice(idx, 1);
         saveData();
-        renderTasks();
         closeModal('detail-modal');
-        showToast();
-      }
-    }
-
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.style.display = 'flex';
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
-    }
-
-    function undoDelete() {
-      if (lastDeletedTask) {
-        tasks.splice(lastDeletedTask.index, 0, lastDeletedTask.task);
-        saveData();
-        renderTasks();
-        document.getElementById('toast').style.display = 'none';
-        lastDeletedTask = null;
       }
     }
 
@@ -534,21 +506,27 @@
     }
 
     function applyStatusFilter(status) {
-      selectedStatusFilter = selectedStatusFilter === status ? null : status;
+      if (selectedStatusFilter === status) {
+        selectedStatusFilter = null;
+        document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
+      } else {
+        selectedStatusFilter = status;
+        document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
+        document.getElementById('card-' + status).classList.add('active-filter');
+      }
       renderTasks();
     }
 
-    function switchTab(tabName, el) {
+    function switchTab(tab, el) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('tab-' + tabName).classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
       if (el) el.classList.add('active');
     }
 
     function toggleTheme() {
-      const body = document.body;
-      const isDark = body.getAttribute('data-theme') === 'dark';
-      body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      const b = document.body;
+      b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
 
     init();
