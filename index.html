@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ödev Takip iOS Edition</title>
+  
+  <!-- 📱 ANA EKRAN UYGULAMA SİMGESİ (APP ICON) -->
+  <!-- Aşağıdaki "FOTOGRAFININ_LINKI.jpg" kısmına kendi fotoğrafının doğrudan linkini yapıştır -->
+  <link rel="apple-touch-icon" href="FOTOGRAFININ_LINKI.jpg">
+  <meta name="apple-mobile-web-app-title" content="Ödev Takip">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <style>
     :root {
       --bg: #f2f2f7;
@@ -35,6 +43,47 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); padding-bottom: 120px; transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .app { max-width: 600px; margin: 0 auto; padding: 16px; }
+
+    /* 🚀 SPLASH SCREEN (AÇILIŞ EKRANI) */
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+    }
+
+    #splash-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #8e8e93);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .splash-author {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0a84ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
 
     /* Header */
     .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; padding-top: 8px; }
@@ -114,6 +163,12 @@
 </head>
 <body>
 
+  <!-- 🚀 AÇILIŞ EKRANI -->
+  <div id="splash-screen">
+    <div class="splash-title">ÖDEV TAKİP ÇİZELGESİ</div>
+    <div class="splash-author">BY ATEŞ SEPETÇİ</div>
+  </div>
+
   <main class="app">
     <!-- 🏠 ANA SAYFA -->
     <section id="tab-home" class="tab-content active">
@@ -151,7 +206,7 @@
         <input type="text" id="search-input" placeholder="Ders, yayın veya konu ara..." oninput="renderTasks()">
       </div>
 
-      <!-- İstediğin Alan ve Ders Filtreleri -->
+      <!-- Filtreler -->
       <div class="filters" id="subject-filters">
         <button class="filter-chip active" onclick="setSubjectFilter('Tümü', this)">Tümü</button>
         <button class="filter-chip" onclick="setSubjectFilter('Sayısal', this)">Sayısal</button>
@@ -252,15 +307,22 @@
   </nav>
 
   <script>
-    const DB_NAME = "odev_app_v3_0";
+    const DB_NAME = "odev_app_v3_2";
     let tasks = [];
     let selectedSubject = "Tümü";
     let selectedStatusFilter = null;
     let currentDetailId = null;
 
-    // Ders Grupları Tanımlamaları
     const SAYISAL_DERSLER = ["Matematik", "Fizik", "Kimya", "Biyoloji"];
     const ESIT_AGIRLIK_DERSLER = ["Matematik", "Türkçe", "Edebiyat", "Tarih", "Coğrafya"];
+
+    // Otomatik Giriş (Splash Screen Kontrolü)
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.classList.add('fade-out');
+      }, 2500);
+    });
 
     function init() {
       try {
@@ -376,7 +438,6 @@
       const search = (document.getElementById('search-input').value || "").toLowerCase();
 
       let filtered = tasks.filter(t => {
-        // Ders / Alan Filtre Mantığı
         let matchesSubject = false;
         if (selectedSubject === "Tümü") matchesSubject = true;
         else if (selectedSubject === "Sayısal") matchesSubject = SAYISAL_DERSLER.includes(t.subject);
