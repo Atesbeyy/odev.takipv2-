@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Ödev Takip iOS Edition</title>
+  <title>Ödev Takip Pro Edition</title>
   
-  <!-- Kapak Fotoğrafı / App Icon (ImgBB Doğrudan Bağlantısı Eklendi) -->
+  <!-- Kapak Fotoğrafı / App Icon -->
   <link rel="apple-touch-icon" href="https://i.ibb.co/BYd0JBy/image.jpg">
   <link rel="icon" type="image/jpeg" href="https://i.ibb.co/BYd0JBy/image.jpg">
   <meta name="apple-mobile-web-app-title" content="Ödev Takip">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Konfeti Kütüphanesi -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
@@ -59,11 +62,7 @@
       transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
     }
 
-    #splash-screen.fade-out {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+    #splash-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
 
     .splash-title {
       font-size: 32px;
@@ -77,51 +76,22 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .splash-author {
-      font-size: 14px;
-      font-weight: 800;
-      color: #0a84ff;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
+    .splash-author { font-size: 14px; font-weight: 800; color: #0a84ff; letter-spacing: 2px; text-transform: uppercase; }
 
-    /* 📋 KAYIT / ONBOARDING MODAL */
+    /* 📋 ONBOARDING MODAL */
     #onboarding-screen {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 8000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      position: fixed; inset: 0; background: var(--bg); z-index: 8000; display: flex; align-items: center; justify-content: center; padding: 20px;
     }
-
     .onboarding-card {
-      background: var(--card-solid);
-      width: 100%;
-      max-width: 440px;
-      padding: 28px;
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      border: 0.5px solid var(--border);
+      background: var(--card-solid); width: 100%; max-width: 440px; padding: 28px; border-radius: 28px; box-shadow: var(--shadow); border: 0.5px solid var(--border);
     }
 
-    /* ⏱️ SAYAÇ KARTI (İSTATİSTİKTE) */
+    /* ⏱️ SAYAÇ KARTI */
     .countdown-card {
       background: linear-gradient(135deg, rgba(10, 132, 255, 0.12), rgba(52, 199, 89, 0.12));
-      border: 0.5px solid var(--border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 22px;
-      padding: 18px 20px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: var(--shadow);
+      border: 0.5px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 22px; padding: 18px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow);
     }
-
     .countdown-info h4 { font-size: 11px; color: var(--sub-text); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
     .countdown-info p { font-size: 13px; font-weight: 700; margin-top: 2px; }
     .countdown-timer { font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
@@ -131,7 +101,6 @@
     .greeting { font-size: 12px; color: var(--sub-text); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .app-title { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-top: 2px; }
     .user-badge { font-size: 11px; font-weight: 800; color: var(--accent); background: var(--input-bg); padding: 4px 10px; border-radius: 12px; margin-top: 6px; display: inline-block; text-transform: uppercase; }
-
     .streak-badge { background: linear-gradient(135deg, #ff9500, #ff2d55); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(255, 149, 0, 0.35); }
 
     /* Summary Grid */
@@ -158,10 +127,8 @@
     /* Task Card */
     .task-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 22px; padding: 18px; margin-bottom: 14px; border: 0.5px solid var(--border); display: flex; gap: 14px; align-items: center; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); }
     .task-card.completed-card { opacity: 0.45; }
-    
     .check-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--sub-text); background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: white; transition: all 0.2s; }
     .check-btn.checked { background: var(--green); border-color: var(--green); }
-
     .task-body { flex: 1; min-width: 0; cursor: pointer; }
     .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     .subject-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -169,10 +136,27 @@
     .task-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
     .task-title.strike { text-decoration: line-through; opacity: 0.8; }
     .task-meta { display: flex; gap: 12px; font-size: 12px; color: var(--sub-text); margin-bottom: 10px; font-weight: 500; }
-    
     .progress-bar-bg { background: var(--input-bg); height: 7px; border-radius: 4px; overflow: hidden; }
     .progress-bar-fill { background: var(--accent); height: 100%; border-radius: 4px; transition: width 0.3s ease; }
     .progress-text { display: flex; justify-content: space-between; font-size: 11px; color: var(--sub-text); margin-top: 6px; font-weight: 700; }
+
+    /* 📝 NOTLAR KART TASARIMI */
+    .note-card {
+      background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 0.5px solid var(--border);
+      position: relative; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .note-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; }
+    .note-blue::before { background: var(--accent); }
+    .note-green::before { background: var(--green); }
+    .note-orange::before { background: var(--orange); }
+    .note-red::before { background: var(--red); }
+    .note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .note-title { font-size: 16px; font-weight: 700; }
+    .note-date { font-size: 11px; color: var(--sub-text); font-weight: 600; }
+    .note-content { font-size: 14px; color: var(--text); line-height: 1.4; opacity: 0.9; white-space: pre-wrap; }
+    .note-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+    .note-btn { background: var(--input-bg); border: none; padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; }
 
     /* Modal */
     .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: flex-end; justify-content: center; z-index: 100; transition: all 0.3s; }
@@ -184,10 +168,12 @@
     .form-group { margin-bottom: 18px; }
     .form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--sub-text); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-control { width: 100%; padding: 15px; border-radius: 16px; border: 0.5px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 16px; outline: none; }
+    textarea.form-control { resize: none; height: 100px; }
     
     .btn { width: 100%; padding: 16px; border-radius: 18px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3); }
+    .btn-green { background: var(--green); color: white; box-shadow: 0 4px 14px rgba(52, 199, 89, 0.3); margin-top: 10px; }
     .btn-danger { background: rgba(255, 59, 48, 0.12); color: var(--red); margin-top: 10px; }
 
     .counter-grid { display: flex; gap: 8px; margin: 18px 0; }
@@ -195,7 +181,7 @@
 
     /* Navbar */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 0.5px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0 28px 0; max-width: 600px; margin: 0 auto; z-index: 90; }
-    .nav-item { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--sub-text); font-size: 10px; font-weight: 700; cursor: pointer; width: 25%; }
+    .nav-item { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--sub-text); font-size: 10px; font-weight: 700; cursor: pointer; width: 20%; }
     .nav-item.active { color: var(--accent); }
     .nav-item span { font-size: 22px; }
 
@@ -211,18 +197,14 @@
     <div class="splash-author">BY ATEŞ SEPETÇİ</div>
   </div>
 
-  <!-- 📋 KAYIT / BAŞLANGIÇ EKRANI -->
+  <!-- 📋 KAYIT EKRANI -->
   <div id="onboarding-screen" style="display: none;">
     <div class="onboarding-card">
       <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Hoş Geldin! 👋</h2>
       <p style="color: var(--sub-text); font-size: 13px; margin-bottom: 20px;">Lütfen sınıfını ve alanını seçerek başla.</p>
       
       <form onsubmit="completeRegistration(event)">
-        <div class="form-group">
-          <label>Adın Soyadın</label>
-          <input type="text" id="reg-name" class="form-control" placeholder="Adını yaz..." required>
-        </div>
-
+        <div class="form-group"><label>Adın Soyadın</label><input type="text" id="reg-name" class="form-control" placeholder="Adını yaz..." required></div>
         <div class="form-group">
           <label>Sınıfın</label>
           <select id="reg-class" class="form-control" onchange="handleClassChange(this.value)" required>
@@ -235,14 +217,10 @@
             <option value="Mezun">Mezun (YKS)</option>
           </select>
         </div>
-
         <div class="form-group" id="group-field" style="display: none;">
           <label id="label-field">Alan Seçimi</label>
-          <select id="reg-field" class="form-control">
-            <!-- Dinamik Dolacak -->
-          </select>
+          <select id="reg-field" class="form-control"></select>
         </div>
-
         <div class="form-group" id="group-timer-opt" style="display: none;">
           <label>YKS Sayacı Gösterilsin mi?</label>
           <select id="reg-timer-opt" class="form-control">
@@ -250,7 +228,6 @@
             <option value="hide">Gizle</option>
           </select>
         </div>
-
         <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Devam Et 🚀</button>
       </form>
     </div>
@@ -265,9 +242,7 @@
           <h1 class="app-title">Ödev Takip</h1>
           <div id="user-info-badge" class="user-badge" style="display:none;">8. SINIF</div>
         </div>
-        <div class="streak-badge">
-          🔥 <span id="streak-count">0</span> Gün
-        </div>
+        <div class="streak-badge">🔥 <span id="streak-count">0</span> Gün</div>
       </header>
 
       <!-- Özet Sayaçlar -->
@@ -294,17 +269,31 @@
         <input type="text" id="search-input" placeholder="Ders, yayın veya konu ara..." oninput="renderTasks()">
       </div>
 
-      <!-- Dinamik Filtreler -->
       <div class="filters" id="subject-filters"></div>
-
       <div id="task-list"></div>
+    </section>
+
+    <!-- 📝 NOTLARIM SEKMESİ (YENİ!) -->
+    <section id="tab-notes" class="tab-content">
+      <header class="header">
+        <div>
+          <div class="greeting">KİŞİSEL ALAN</div>
+          <h1 class="app-title">Notlarım</h1>
+        </div>
+        <button class="filter-chip active" onclick="openAddNoteModal()">+ Not Ekle</button>
+      </header>
+
+      <div class="search-box">
+        <input type="text" id="note-search-input" placeholder="Notlarda ara..." oninput="renderNotes()">
+      </div>
+
+      <div id="notes-list"></div>
     </section>
 
     <!-- 📊 İSTATİSTİK -->
     <section id="tab-stats" class="tab-content">
       <header class="header"><h1 class="app-title">İstatistikler</h1></header>
       
-      <!-- ⏱️ DİNAMİK SAYAÇ KARTI (İSTATİSTİK BÖLÜMÜNDE) -->
       <div id="countdown-wrapper" class="countdown-card" style="display: none;">
         <div class="countdown-info">
           <h4 id="timer-title">SINAV SAYACI</h4>
@@ -313,22 +302,32 @@
         <div class="countdown-timer" id="timer-display">0 Gün</div>
       </div>
 
-      <div class="summary-card" style="flex-direction:column; text-align:center; padding: 36px 20px; cursor:default;">
+      <div class="summary-card" style="flex-direction:column; text-align:center; padding: 28px 20px; cursor:default; margin-bottom: 16px;">
         <h3 style="color: var(--sub-text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Genel Tamamlanma</h3>
-        <h2 id="stats-pct" style="font-size: 56px; font-weight:800; color: var(--accent); margin: 8px 0; letter-spacing: -1px;">%0</h2>
+        <h2 id="stats-pct" style="font-size: 52px; font-weight:800; color: var(--accent); margin: 6px 0; letter-spacing: -1px;">%0</h2>
         <p style="color: var(--sub-text); font-weight: 500;" id="stats-detail">0 ödevden 0 tanesi tamamlandı.</p>
       </div>
+
+      <!-- 📲 WHATSAPP VELİ RAPORU BUTONU -->
+      <button class="btn btn-green" onclick="sendWhatsAppReport()">📲 Veliye / Öğretmene WhatsApp Raporu Gönder</button>
+      <button class="btn btn-danger" style="margin-top: 10px;" onclick="clearCompletedTasks()">🧹 Tamamlanan Ödevleri Temizle</button>
     </section>
 
     <!-- ⚙️ AYARLAR -->
     <section id="tab-settings" class="tab-content">
       <header class="header"><h1 class="app-title">Ayarlar</h1></header>
-      <div class="summary-card" style="flex-direction:column; align-items:stretch; gap: 16px; cursor:default;">
+      <div class="summary-card" style="flex-direction:column; align-items:stretch; gap: 14px; cursor:default;">
         <div class="form-group">
           <label>Kullanıcı Adın</label>
           <input type="text" id="inp-username" class="form-control" placeholder="Adını yaz..." onchange="saveUsername(this.value)">
         </div>
         <button class="btn btn-primary" onclick="toggleTheme()">🌙 Tema Değiştir</button>
+        
+        <!-- 💾 YEDEKLEME BUTONLARI -->
+        <button class="btn btn-primary" style="background: #30d158;" onclick="exportBackup()">💾 Verileri Yedekle (İndir)</button>
+        <button class="btn btn-primary" style="background: #5856d6;" onclick="document.getElementById('file-import').click()">📥 Yedeği Geri Yükle</button>
+        <input type="file" id="file-import" style="display:none" onchange="importBackup(event)" accept=".json">
+
         <button class="btn btn-danger" onclick="resetProfile()">🔄 Sınıf & Alan Seçimini Yenile</button>
       </div>
     </section>
@@ -344,17 +343,12 @@
       <form onsubmit="saveTask(event)">
         <div class="form-group">
           <label>Ders</label>
-          <select id="inp-subject" class="form-control" onchange="handleSubjectChange(this.value)" required>
-            <!-- Dinamik Dolacak -->
-          </select>
+          <select id="inp-subject" class="form-control" onchange="handleSubjectChange(this.value)" required></select>
         </div>
-
-        <!-- ✍️ ÖZEL DERS İSMİ GİRİŞ ALANI (DİĞER SEÇİLİRSE AÇILIR) -->
         <div class="form-group" id="custom-subject-group" style="display: none;">
           <label>Dersin Adını Yaz</label>
-          <input type="text" id="inp-custom-subject" class="form-control" placeholder="Örn: Felsefe, Din, Geometri vb.">
+          <input type="text" id="inp-custom-subject" class="form-control" placeholder="Örn: Felsefe, Din vb.">
         </div>
-
         <div class="form-group"><label>Yayın</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345" required></div>
         <div class="form-group"><label>Konu</label><input type="text" id="inp-topic" class="form-control" placeholder="Örn: Paragraf / Üslü Sayılar" required></div>
         <div class="form-group"><label>Sayfa veya Test Miktarı</label><input type="text" id="inp-range" class="form-control" placeholder="Örn: 100 150 veya 3 test" required></div>
@@ -364,7 +358,38 @@
     </div>
   </div>
 
-  <!-- 👆 DETAY MODAL -->
+  <!-- 📝 NOT EKLE MODAL -->
+  <div class="modal" id="add-note-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="note-modal-title">Yeni Not Ekle</h2>
+        <button class="close-btn" onclick="closeModal('add-note-modal')">✕</button>
+      </div>
+      <form onsubmit="saveNote(event)">
+        <input type="hidden" id="inp-note-id">
+        <div class="form-group">
+          <label>Başlık</label>
+          <input type="text" id="inp-note-title" class="form-control" placeholder="Not Başlığı..." required>
+        </div>
+        <div class="form-group">
+          <label>Not İçeriği</label>
+          <textarea id="inp-note-content" class="form-control" placeholder="Notunu buraya yaz..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Renk Etiketi</label>
+          <select id="inp-note-color" class="form-control">
+            <option value="blue">🔵 Mavi (Genel)</option>
+            <option value="green">🟢 Yeşil (Önemli)</option>
+            <option value="orange">🟠 Turuncu (Hatırlatma)</option>
+            <option value="red">🔴 Kırmızı (Acil)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 👆 ÖDEV DETAY MODAL -->
   <div class="modal" id="detail-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -372,19 +397,16 @@
         <button class="close-btn" onclick="closeModal('detail-modal')">✕</button>
       </div>
       <div style="color: var(--sub-text); font-size: 14px; margin-bottom: 18px; font-weight: 500;" id="det-meta"></div>
-      
       <div class="form-group">
         <label id="det-input-label">Tamamlanan Miktar</label>
         <input type="number" id="det-completed" class="form-control">
       </div>
-
       <div class="counter-grid">
         <button class="btn-counter" onclick="adjustProgress(-5)">-5</button>
         <button class="btn-counter" onclick="adjustProgress(-1)">-1</button>
         <button class="btn-counter" onclick="adjustProgress(1)">+1</button>
         <button class="btn-counter" onclick="adjustProgress(5)">+5</button>
       </div>
-
       <button class="btn btn-primary" onclick="saveDetailEdit()">Kaydet</button>
       <button class="btn btn-danger" onclick="deleteCurrentTask()">🗑️ Ödevi Sil</button>
     </div>
@@ -392,21 +414,23 @@
 
   <!-- Navbar -->
   <nav class="navbar">
-    <button class="nav-item active" onclick="switchTab('home', this)"><span>🏠</span>Ana Sayfa</button>
-    <button class="nav-item" onclick="openAddModal()"><span>➕</span>Ödev Ekle</button>
+    <button class="nav-item active" onclick="switchTab('home', this)"><span>🏠</span>Ödevler</button>
+    <button class="nav-item" onclick="switchTab('notes', this)"><span>📝</span>Notlarım</button>
+    <button class="nav-item" onclick="openAddModal()"><span>➕</span>Ekle</button>
     <button class="nav-item" onclick="switchTab('stats', this)"><span>📊</span>İstatistik</button>
     <button class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span>Ayarlar</button>
   </nav>
 
   <script>
-    const DB_NAME = "odev_app_v3_3";
+    const DB_NAME = "odev_app_v4";
+    const NOTES_DB_NAME = "odev_notes_v4";
     let tasks = [];
+    let notes = [];
     let selectedSubject = "Tümü";
     let selectedStatusFilter = null;
     let currentDetailId = null;
     let userData = null;
 
-    // --- SINIF VE BÖLÜME GÖRE AÇIK DERS LİSTELERİ ---
     const LESSON_MAP = {
       "8": ["Matematik", "Fen Bilimleri", "Türkçe", "T.C. İnkılap Tarihi", "İngilizce", "Din Kültürü"],
       "9": ["Matematik", "Fizik", "Kimya", "Biyoloji", "Türk Dili ve Edebiyatı", "Tarih", "Coğrafya", "İngilizce"],
@@ -421,16 +445,16 @@
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) splash.classList.add('fade-out');
-      }, 2500);
-
+      }, 2000);
       init();
     });
 
     function init() {
       try {
         tasks = JSON.parse(localStorage.getItem(DB_NAME) || "[]");
+        notes = JSON.parse(localStorage.getItem(NOTES_DB_NAME) || "[]");
       } catch (e) {
-        tasks = [];
+        tasks = []; notes = [];
       }
 
       const storedUser = localStorage.getItem("odev_user_profile");
@@ -445,6 +469,7 @@
       if (dueInp) dueInp.valueAsDate = new Date();
 
       saveData();
+      renderNotes();
     }
 
     function handleClassChange(val) {
@@ -453,60 +478,35 @@
       const fieldSelect = document.getElementById('reg-field');
       const fieldLabel = document.getElementById('label-field');
 
-      if (!val) {
-        fieldGroup.style.display = 'none';
-        timerGroup.style.display = 'none';
-        return;
-      }
-
+      if (!val) { fieldGroup.style.display = 'none'; timerGroup.style.display = 'none'; return; }
       fieldGroup.style.display = 'block';
 
       if (val === "8") {
         fieldLabel.innerText = "LGS Odak Seçimi";
-        fieldSelect.innerHTML = `
-          <option value="Sayısal Ağırlıklı">Sayısal Ağırlıklı</option>
-          <option value="Sözel Ağırlıklı">Sözel Ağırlıklı</option>
-          <option value="Dengeli LGS">Dengeli LGS</option>
-        `;
+        fieldSelect.innerHTML = `<option value="Sayısal Ağırlıklı">Sayısal Ağırlıklı</option><option value="Sözel Ağırlıklı">Sözel Ağırlıklı</option><option value="Dengeli LGS">Dengeli LGS</option>`;
         timerGroup.style.display = 'none';
       } else {
         fieldLabel.innerText = "Alan Seçimi";
-        fieldSelect.innerHTML = `
-          <option value="Sayısal">Sayısal</option>
-          <option value="Eşit Ağırlık">Eşit Ağırlık</option>
-          <option value="Sözel">Sözel</option>
-          <option value="Dil">Dil</option>
-        `;
-
-        if (val === "9" || val === "10") {
-          timerGroup.style.display = 'block';
-        } else {
-          timerGroup.style.display = 'none';
-        }
+        fieldSelect.innerHTML = `<option value="Sayısal">Sayısal</option><option value="Eşit Ağırlık">Eşit Ağırlık</option><option value="Sözel">Sözel</option><option value="Dil">Dil</option>`;
+        timerGroup.style.display = (val === "9" || val === "10") ? 'block' : 'none';
       }
     }
 
     function completeRegistration(e) {
       e.preventDefault();
-      const cls = document.getElementById('reg-class').value;
-      const timerOpt = document.getElementById('reg-timer-opt').value;
-
       userData = {
         name: document.getElementById('reg-name').value.trim(),
-        classLevel: cls,
+        classLevel: document.getElementById('reg-class').value,
         field: document.getElementById('reg-field').value,
-        showTimerIn910: timerOpt === 'show'
+        showTimerIn910: document.getElementById('reg-timer-opt').value === 'show'
       };
-
       localStorage.setItem("odev_user_profile", JSON.stringify(userData));
-      localStorage.setItem("odev_user", userData.name);
       document.getElementById('onboarding-screen').style.display = 'none';
       setupUserUI();
     }
 
     function setupUserUI() {
       if (!userData) return;
-
       document.getElementById('user-greeting').innerText = `Hoş Geldin, ${userData.name} 👋`;
       document.getElementById('inp-username').value = userData.name;
 
@@ -519,22 +519,10 @@
     }
 
     function setupLessonsAndFilters() {
-      let activeLessons = [];
-
-      if (userData.classLevel === "8") {
-        activeLessons = [...LESSON_MAP["8"]];
-      } else if (userData.classLevel === "9" || userData.classLevel === "10") {
-        activeLessons = [...LESSON_MAP[userData.classLevel]];
-      } else {
-        activeLessons = [...(LESSON_MAP[userData.field] || LESSON_MAP["Sayısal"])];
-      }
-
-      // Ödev Ekle Modalındaki Select Kutusu
+      let activeLessons = LESSON_MAP[userData.classLevel] || LESSON_MAP[userData.field] || LESSON_MAP["Sayısal"];
       const subjectSelect = document.getElementById('inp-subject');
-      subjectSelect.innerHTML = activeLessons.map(l => `<option value="${l}">${l}</option>`).join('') + 
-        `<option value="OTHER_CUSTOM">✍️ Diğer (Kendin Yaz)</option>`;
+      subjectSelect.innerHTML = activeLessons.map(l => `<option value="${l}">${l}</option>`).join('') + `<option value="OTHER_CUSTOM">✍️ Diğer (Kendin Yaz)</option>`;
 
-      // Ana Sayfadaki Filtre Çipleri
       const filterBox = document.getElementById('subject-filters');
       filterBox.innerHTML = `<button class="filter-chip active" onclick="setSubjectFilter('Tümü', this)">Tümü</button>` +
         activeLessons.map(l => `<button class="filter-chip" onclick="setSubjectFilter('${l}', this)">${l}</button>`).join('');
@@ -542,13 +530,7 @@
 
     function handleSubjectChange(val) {
       const customGroup = document.getElementById('custom-subject-group');
-      if (val === "OTHER_CUSTOM") {
-        customGroup.style.display = 'block';
-        document.getElementById('inp-custom-subject').required = true;
-      } else {
-        customGroup.style.display = 'none';
-        document.getElementById('inp-custom-subject').required = false;
-      }
+      customGroup.style.display = val === "OTHER_CUSTOM" ? 'block' : 'none';
     }
 
     function setupCountdown() {
@@ -556,28 +538,17 @@
       const timerTitle = document.getElementById('timer-title');
       const now = new Date();
       const currentYear = now.getFullYear();
-
-      let targetDate = null;
-      let titleText = "";
+      let targetDate = null, titleText = "";
 
       if (userData.classLevel === "8") {
         targetDate = new Date(`${currentYear}-06-07T09:30:00`);
         if (now > targetDate) targetDate = new Date(`${currentYear + 1}-06-07T09:30:00`);
         titleText = "🏆 LGS GERİ SAYIM";
-      } 
-      else if (userData.classLevel === "11") {
-        targetDate = new Date(`${currentYear + 2}-06-20T10:15:00`);
-        titleText = "🎯 YKS GERİ SAYIM (12. SINIF SONU)";
-      } 
-      else if (["12", "Mezun"].includes(userData.classLevel)) {
-        targetDate = new Date(`${currentYear}-06-20T10:15:00`);
+      } else if (["11", "12", "Mezun"].includes(userData.classLevel) || userData.showTimerIn910) {
+        let yearsToAdd = userData.classLevel === "11" ? 2 : (userData.classLevel === "9" ? 3 : (userData.classLevel === "10" ? 2 : 0));
+        targetDate = new Date(`${currentYear + yearsToAdd}-06-20T10:15:00`);
         if (now > targetDate) targetDate = new Date(`${currentYear + 1}-06-20T10:15:00`);
         titleText = "🎯 YKS GERİ SAYIM";
-      } 
-      else if (["9", "10"].includes(userData.classLevel) && userData.showTimerIn910) {
-        let yearsToAdd = userData.classLevel === "9" ? 3 : 2;
-        targetDate = new Date(`${currentYear + yearsToAdd}-06-20T10:15:00`);
-        titleText = "🎯 YKS HEDEF SAYACI";
       }
 
       if (targetDate) {
@@ -585,14 +556,11 @@
         timerTitle.innerText = titleText;
         updateCountdown(targetDate);
         setInterval(() => updateCountdown(targetDate), 60000);
-      } else {
-        countdownWrapper.style.display = 'none';
       }
     }
 
     function updateCountdown(target) {
-      const now = new Date();
-      const diff = target - now;
+      const diff = target - new Date();
       if (diff > 0) {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         document.getElementById('timer-display').innerText = `${days} Gün`;
@@ -601,24 +569,153 @@
       }
     }
 
-    // --- ESNEK SAYFA SAYSİ / MİKTAR HESAPLAMA ---
+    /* 📝 NOT YÖNETİMİ */
+    function renderNotes() {
+      const container = document.getElementById('notes-list');
+      const search = (document.getElementById('note-search-input').value || "").toLowerCase();
+
+      const filtered = notes.filter(n => n.title.toLowerCase().includes(search) || n.content.toLowerCase().includes(search));
+
+      if (!filtered.length) {
+        container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--sub-text); font-weight:600;">Henüz kaydedilmiş not yok.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(n => `
+        <div class="note-card note-${n.color || 'blue'}">
+          <div class="note-header">
+            <div class="note-title">${n.title}</div>
+            <div class="note-date">${n.date}</div>
+          </div>
+          <div class="note-content">${n.content}</div>
+          <div class="note-actions">
+            <button class="note-btn" onclick="editNote('${n.id}')">✏️ Düzenle</button>
+            <button class="note-btn" style="color:var(--red)" onclick="deleteNote('${n.id}')">🗑️ Sil</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openAddNoteModal() {
+      document.getElementById('note-modal-title').innerText = "Yeni Not Ekle";
+      document.getElementById('inp-note-id').value = "";
+      document.getElementById('inp-note-title').value = "";
+      document.getElementById('inp-note-content').value = "";
+      document.getElementById('add-note-modal').classList.add('active');
+    }
+
+    function saveNote(e) {
+      e.preventDefault();
+      const id = document.getElementById('inp-note-id').value;
+      const title = document.getElementById('inp-note-title').value.trim();
+      const content = document.getElementById('inp-note-content').value.trim();
+      const color = document.getElementById('inp-note-color').value;
+      const date = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+
+      if (id) {
+        const note = notes.find(n => n.id === id);
+        if (note) { note.title = title; note.content = content; note.color = color; }
+      } else {
+        notes.unshift({ id: Date.now().toString(), title, content, color, date });
+      }
+
+      localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
+      renderNotes();
+      closeModal('add-note-modal');
+    }
+
+    function editNote(id) {
+      const n = notes.find(x => x.id === id);
+      if (!n) return;
+      document.getElementById('note-modal-title').innerText = "Notu Düzenle";
+      document.getElementById('inp-note-id').value = n.id;
+      document.getElementById('inp-note-title').value = n.title;
+      document.getElementById('inp-note-content').value = n.content;
+      document.getElementById('inp-note-color').value = n.color || "blue";
+      document.getElementById('add-note-modal').classList.add('active');
+    }
+
+    function deleteNote(id) {
+      notes = notes.filter(n => n.id !== id);
+      localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
+      renderNotes();
+    }
+
+    /* 📲 WHATSAPP VELİ RAPORU */
+    function sendWhatsAppReport() {
+      if (!tasks.length) { alert("Rapor gönderilecek ödev bulunamadı."); return; }
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.completed || t.completedCount >= t.totalCount).length;
+      const overdue = tasks.filter(t => getTaskCategory(t) === 'overdue').length;
+      const pct = Math.round((completed / total) * 100);
+
+      let text = `📊 *${userData ? userData.name : 'Öğrenci'} - ÖDEV TAKİP RAPORU*\n\n`;
+      text += `✅ *Tamamlanan:* ${completed} / ${total} (%${pct})\n`;
+      text += `🔴 *Geciken Ödevler:* ${overdue} Adet\n\n`;
+      text += `*Son Ödev Durumları:*\n`;
+
+      tasks.slice(0, 5).forEach(t => {
+        const status = t.completed ? "✅" : (getTaskCategory(t) === 'overdue' ? "❌" : "⏳");
+        text += `${status} ${t.subject} - ${t.topic} (${t.completedCount}/${t.totalCount})\n`;
+      });
+
+      text += `\n_Ateş Sepetçi Ödev Takip Sistemi ile Gönderildi._`;
+
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    /* 💾 VERİ YEDEKLEME */
+    function exportBackup() {
+      const data = { tasks, notes, userData };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `odev_takip_yedek_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+    }
+
+    function importBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          if (imported.tasks) tasks = imported.tasks;
+          if (imported.notes) notes = imported.notes;
+          if (imported.userData) userData = imported.userData;
+
+          localStorage.setItem(DB_NAME, JSON.stringify(tasks));
+          localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
+          if (userData) localStorage.setItem("odev_user_profile", JSON.stringify(userData));
+
+          alert("Veriler başarıyla yüklendi! 🎉");
+          location.reload();
+        } catch (err) {
+          alert("Geçersiz yedek dosyası!");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function clearCompletedTasks() {
+      if (confirm("Tamamlanan ödevleri silmek istediğine emin misin?")) {
+        tasks = tasks.filter(t => !t.completed && t.completedCount < t.totalCount);
+        saveData();
+      }
+    }
+
     function parseAmountAndUnit(rangeStr) {
       if (!rangeStr) return { total: 10, unit: "sayfa" };
       const str = rangeStr.toLowerCase().trim();
-      const isTest = str.includes("test");
-      const unit = isTest ? "test" : "sayfa";
-
+      const unit = str.includes("test") ? "test" : "sayfa";
       const numbers = str.match(/\d+/g);
-      
       if (numbers && numbers.length >= 2) {
-        const num1 = parseInt(numbers[0]);
-        const num2 = parseInt(numbers[1]);
-        const total = Math.abs(num2 - num1) + 1;
-        return { total, unit };
+        return { total: Math.abs(parseInt(numbers[1]) - parseInt(numbers[0])) + 1, unit };
       } else if (numbers && numbers.length === 1) {
         return { total: parseInt(numbers[0]), unit };
       }
-
       return { total: 10, unit };
     }
 
@@ -638,6 +735,7 @@
         if (t.completed) {
           t.completedCount = t.totalCount;
           t.completedAt = new Date().toISOString().split('T')[0];
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.8 } });
         } else {
           t.completedCount = 0;
           t.completedAt = null;
@@ -648,19 +746,12 @@
 
     function calculateStreak() {
       const dates = [...new Set(tasks.filter(t => t.completed && t.completedAt).map(t => t.completedAt))].sort().reverse();
-      let streak = 0;
-      let check = new Date();
-
+      let streak = 0, check = new Date();
       for (let i = 0; i < 30; i++) {
         const dStr = check.toISOString().split('T')[0];
-        if (dates.includes(dStr)) {
-          streak++;
-          check.setDate(check.getDate() - 1);
-        } else if (i === 0) {
-          check.setDate(check.getDate() - 1);
-        } else {
-          break;
-        }
+        if (dates.includes(dStr)) { streak++; check.setDate(check.getDate() - 1); }
+        else if (i === 0) { check.setDate(check.getDate() - 1); }
+        else break;
       }
       document.getElementById('streak-count').innerText = streak;
     }
@@ -681,8 +772,7 @@
       document.getElementById('cnt-upcoming').innerText = counts.upcoming;
       document.getElementById('cnt-completed').innerText = counts.completed;
 
-      const total = tasks.length;
-      const comp = counts.completed;
+      const total = tasks.length, comp = counts.completed;
       const pct = total ? Math.round((comp / total) * 100) : 0;
       document.getElementById('stats-pct').innerText = `%${pct}`;
       document.getElementById('stats-detail').innerText = `${total} ödevden ${comp} tanesi tamamlandı.`;
@@ -693,12 +783,9 @@
       const search = (document.getElementById('search-input').value || "").toLowerCase();
 
       let filtered = tasks.filter(t => {
-        let matchesSubject = false;
-        if (selectedSubject === "Tümü") matchesSubject = true;
-        else matchesSubject = (t.subject || "").toLowerCase() === selectedSubject.toLowerCase();
-
-        const matchesSearch = (t.topic || "").toLowerCase().includes(search) || (t.publisher || "").toLowerCase().includes(search) || (t.subject || "").toLowerCase().includes(search);
-        const matchesStatus = !selectedStatusFilter || getTaskCategory(t) === selectedStatusFilter;
+        let matchesSubject = selectedSubject === "Tümü" || (t.subject || "").toLowerCase() === selectedSubject.toLowerCase();
+        let matchesSearch = (t.topic || "").toLowerCase().includes(search) || (t.publisher || "").toLowerCase().includes(search) || (t.subject || "").toLowerCase().includes(search);
+        let matchesStatus = !selectedStatusFilter || getTaskCategory(t) === selectedStatusFilter;
         return matchesSubject && matchesSearch && matchesStatus;
       });
 
@@ -709,10 +796,8 @@
 
       container.innerHTML = filtered.map(t => {
         const isDone = t.completed || t.completedCount >= t.totalCount;
-        const total = t.totalCount || 10;
-        const current = t.completedCount || 0;
+        const total = t.totalCount || 10, current = t.completedCount || 0;
         const pct = Math.min(100, Math.round((current / total) * 100));
-        const unitText = t.unit || "sayfa";
 
         return `
           <div class="task-card ${isDone ? 'completed-card' : ''}">
@@ -729,11 +814,9 @@
                 <span>📖 ${t.range}</span>
                 <span>📅 ${(t.dueDate || '').split('-').reverse().slice(0,2).join('/')}</span>
               </div>
-              <div class="progress-bar-bg">
-                <div class="progress-bar-fill" style="width: ${pct}%"></div>
-              </div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%"></div></div>
               <div class="progress-text">
-                <span>${current} / ${total} ${unitText}</span>
+                <span>${current} / ${total} ${t.unit || 'sayfa'}</span>
                 <span>%${pct}</span>
               </div>
             </div>
@@ -748,12 +831,7 @@
     function saveTask(e) {
       e.preventDefault();
       const selectVal = document.getElementById('inp-subject').value;
-      let finalSubject = selectVal;
-
-      if (selectVal === "OTHER_CUSTOM") {
-        finalSubject = document.getElementById('inp-custom-subject').value.trim() || "Diğer";
-      }
-
+      const finalSubject = selectVal === "OTHER_CUSTOM" ? (document.getElementById('inp-custom-subject').value.trim() || "Diğer") : selectVal;
       const range = document.getElementById('inp-range').value;
       const parsed = parseAmountAndUnit(range);
 
@@ -780,11 +858,9 @@
       currentDetailId = id;
       const t = tasks.find(x => x.id === id);
       if (!t) return;
-
-      const unitText = t.unit || "sayfa";
       document.getElementById('det-title').innerText = `${t.subject} — ${t.topic}`;
       document.getElementById('det-meta').innerText = `Yayın: ${t.publisher} • Son Tarih: ${t.dueDate}`;
-      document.getElementById('det-input-label').innerText = `TAMAMLANAN ${unitText.toUpperCase()} SAYISI`;
+      document.getElementById('det-input-label').innerText = `TAMAMLANAN ${(t.unit || 'sayfa').toUpperCase()} SAYISI`;
       document.getElementById('det-completed').value = t.completedCount || 0;
       document.getElementById('detail-modal').classList.add('active');
     }
@@ -793,9 +869,7 @@
       const inp = document.getElementById('det-completed');
       let val = (parseInt(inp.value) || 0) + delta;
       const t = tasks.find(x => x.id === currentDetailId);
-      if (t) {
-        val = Math.max(0, Math.min(t.totalCount, val));
-      }
+      if (t) val = Math.max(0, Math.min(t.totalCount, val));
       inp.value = val;
     }
 
@@ -804,20 +878,19 @@
       if (t) {
         t.completedCount = parseInt(document.getElementById('det-completed').value) || 0;
         t.completed = t.completedCount >= t.totalCount;
-        if (t.completed) t.completedAt = new Date().toISOString().split('T')[0];
-        else t.completedAt = null;
+        if (t.completed) {
+          t.completedAt = new Date().toISOString().split('T')[0];
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.8 } });
+        } else t.completedAt = null;
         saveData();
         closeModal('detail-modal');
       }
     }
 
     function deleteCurrentTask() {
-      const idx = tasks.findIndex(x => x.id === currentDetailId);
-      if (idx > -1) {
-        tasks.splice(idx, 1);
-        saveData();
-        closeModal('detail-modal');
-      }
+      tasks = tasks.filter(x => x.id !== currentDetailId);
+      saveData();
+      closeModal('detail-modal');
     }
 
     function setSubjectFilter(subj, el) {
@@ -828,14 +901,9 @@
     }
 
     function applyStatusFilter(status) {
-      if (selectedStatusFilter === status) {
-        selectedStatusFilter = null;
-        document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
-      } else {
-        selectedStatusFilter = status;
-        document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
-        document.getElementById('card-' + status).classList.add('active-filter');
-      }
+      selectedStatusFilter = selectedStatusFilter === status ? null : status;
+      document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
+      if (selectedStatusFilter) document.getElementById('card-' + status).classList.add('active-filter');
       renderTasks();
     }
 
@@ -853,16 +921,12 @@
 
     function saveUsername(val) {
       const clean = val.trim();
-      localStorage.setItem("odev_user", clean);
-      if (userData) {
-        userData.name = clean;
-        localStorage.setItem("odev_user_profile", JSON.stringify(userData));
-      }
+      if (userData) { userData.name = clean; localStorage.setItem("odev_user_profile", JSON.stringify(userData)); }
       document.getElementById('user-greeting').innerText = clean ? `Hoş Geldin, ${clean} 👋` : "Hoş Geldin 👋";
     }
 
     function resetProfile() {
-      if (confirm("Sınıf ve alan bilgini yeniden ayarlamak istiyor musun?")) {
+      if (confirm("Sınıf ve alan bilgini sıfırlamak istediğine emin misin?")) {
         localStorage.removeItem("odev_user_profile");
         location.reload();
       }
