@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Ödev Takip Pro Edition</title>
+  <title>Ödev Takip Pro - Ultimate Edition</title>
   
   <link rel="apple-touch-icon" href="https://i.ibb.co/BYd0JBy/image.jpg">
   <link rel="icon" type="image/jpeg" href="https://i.ibb.co/BYd0JBy/image.jpg">
@@ -11,13 +11,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Konfeti Kütüphanesi -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
       --bg: #f2f2f7;
-      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-bg: rgba(255, 255, 255, 0.85);
       --card-solid: #ffffff;
       --text: #000000;
       --sub-text: #8e8e93;
@@ -25,19 +24,20 @@
       --green: #34c759;
       --red: #ff3b30;
       --orange: #ff9500;
-      --border: rgba(60, 60, 67, 0.08);
+      --purple: #af52de;
+      --border: rgba(60, 60, 67, 0.12);
       --input-bg: rgba(118, 118, 128, 0.12);
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
     }
 
     [data-theme="dark"] {
       --bg: #000000;
-      --card-bg: rgba(28, 28, 30, 0.75);
+      --card-bg: rgba(28, 28, 30, 0.85);
       --card-solid: #1c1c1e;
       --text: #ffffff;
       --sub-text: #8e8e93;
       --accent: #0a84ff;
-      --border: rgba(255, 255, 255, 0.12);
+      --border: rgba(255, 255, 255, 0.15);
       --input-bg: rgba(118, 118, 128, 0.24);
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
     }
@@ -46,7 +46,6 @@
     body { background-color: var(--bg); color: var(--text); padding-bottom: 120px; transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .app { max-width: 600px; margin: 0 auto; padding: 16px; }
 
-    /* SPLASH SCREEN */
     #splash-screen {
       position: fixed; inset: 0; background: #000000; z-index: 9999;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -54,16 +53,14 @@
     }
     #splash-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
     .splash-title {
-      font-size: 32px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; text-transform: uppercase; margin-bottom: 8px;
+      font-size: 30px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; text-transform: uppercase; margin-bottom: 8px;
       background: linear-gradient(135deg, #ffffff, #8e8e93); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .splash-author { font-size: 14px; font-weight: 800; color: #0a84ff; letter-spacing: 2px; text-transform: uppercase; }
+    .splash-author { font-size: 13px; font-weight: 800; color: #0a84ff; letter-spacing: 2px; text-transform: uppercase; }
 
-    /* ONBOARDING MODAL */
     #onboarding-screen { position: fixed; inset: 0; background: var(--bg); z-index: 8000; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .onboarding-card { background: var(--card-solid); width: 100%; max-width: 440px; padding: 28px; border-radius: 28px; box-shadow: var(--shadow); border: 0.5px solid var(--border); }
 
-    /* SAYAÇ KARTI */
     .countdown-card {
       background: linear-gradient(135deg, rgba(10, 132, 255, 0.12), rgba(52, 199, 89, 0.12));
       border: 0.5px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -73,27 +70,25 @@
     .countdown-info p { font-size: 13px; font-weight: 700; margin-top: 2px; }
     .countdown-timer { font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
 
-    /* Header */
-    .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; padding-top: 8px; }
+    .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; padding-top: 8px; }
     .greeting { font-size: 12px; color: var(--sub-text); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .app-title { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-top: 2px; }
+    .app-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-top: 2px; }
     .user-badge { font-size: 11px; font-weight: 800; color: var(--accent); background: var(--input-bg); padding: 4px 10px; border-radius: 12px; margin-top: 6px; display: inline-block; text-transform: uppercase; }
     .streak-badge { background: linear-gradient(135deg, #ff9500, #ff2d55); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(255, 149, 0, 0.35); }
 
-    /* Summary Grid */
     .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
     .summary-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); padding: 16px; border-radius: 22px; display: flex; align-items: center; justify-content: space-between; border: 0.5px solid var(--border); cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); }
     .summary-card:active { transform: scale(0.96); }
     .summary-card.active-filter { border: 2px solid var(--accent); }
     .summary-info span { font-size: 12px; color: var(--sub-text); font-weight: 600; display: block; }
-    .summary-info b { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-    .badge-icon { width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .summary-info b { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .badge-icon { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .bg-red { background: rgba(255, 59, 48, 0.12); }
     .bg-orange { background: rgba(255, 149, 0, 0.12); }
     .bg-blue { background: rgba(0, 122, 255, 0.12); }
     .bg-green { background: rgba(52, 199, 89, 0.12); }
+    .bg-purple { background: rgba(175, 82, 222, 0.12); }
 
-    /* Inputs & Filters */
     .search-box input { width: 100%; padding: 14px 18px; border-radius: 16px; border: 0.5px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 15px; outline: none; margin-bottom: 14px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: var(--shadow); }
     
     .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px; scrollbar-width: none; }
@@ -101,13 +96,13 @@
     .filter-chip { background: var(--card-bg); color: var(--sub-text); border: 0.5px solid var(--border); padding: 9px 18px; border-radius: 22px; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(20px); }
     .filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
 
-    /* Task Card */
-    .task-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 22px; padding: 18px; margin-bottom: 14px; border: 0.5px solid var(--border); display: flex; gap: 14px; align-items: center; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); }
-    .task-card.completed-card { opacity: 0.45; }
+    /* Task Card & Actions */
+    .task-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 22px; padding: 18px; margin-bottom: 14px; border: 0.5px solid var(--border); display: flex; gap: 14px; align-items: center; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); position: relative; }
+    .task-card.completed-card { opacity: 0.5; }
     .check-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--sub-text); background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: white; transition: all 0.2s; }
     .check-btn.checked { background: var(--green); border-color: var(--green); }
     .task-body { flex: 1; min-width: 0; cursor: pointer; }
-    .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding-right: 28px; }
     .subject-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
     .pub-tag { font-size: 12px; font-weight: 700; color: var(--sub-text); }
     .task-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
@@ -116,24 +111,8 @@
     .progress-bar-bg { background: var(--input-bg); height: 7px; border-radius: 4px; overflow: hidden; }
     .progress-bar-fill { background: var(--accent); height: 100%; border-radius: 4px; transition: width 0.3s ease; }
     .progress-text { display: flex; justify-content: space-between; font-size: 11px; color: var(--sub-text); margin-top: 6px; font-weight: 700; }
-
-    /* NOTLAR KART TASARIMI */
-    .note-card {
-      background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-      border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 0.5px solid var(--border);
-      position: relative; overflow: hidden; box-shadow: var(--shadow);
-    }
-    .note-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; }
-    .note-blue::before { background: var(--accent); }
-    .note-green::before { background: var(--green); }
-    .note-orange::before { background: var(--orange); }
-    .note-red::before { background: var(--red); }
-    .note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .note-title { font-size: 16px; font-weight: 700; }
-    .note-date { font-size: 11px; color: var(--sub-text); font-weight: 600; }
-    .note-content { font-size: 14px; color: var(--text); line-height: 1.4; opacity: 0.9; white-space: pre-wrap; }
-    .note-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
-    .note-btn { background: var(--input-bg); border: none; padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; }
+    
+    .edit-task-btn { position: absolute; right: 16px; top: 16px; background: var(--input-bg); border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
     /* Modal */
     .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: flex-end; justify-content: center; z-index: 100; transition: all 0.3s; }
@@ -144,19 +123,18 @@
 
     .form-group { margin-bottom: 18px; }
     .form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--sub-text); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-control { width: 100%; padding: 15px; border-radius: 16px; border: 0.5px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 16px; outline: none; }
-    textarea.form-control { resize: none; height: 100px; }
-    
-    .btn { width: 100%; padding: 16px; border-radius: 18px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
+    .form-control { width: 100%; padding: 15px; border-radius: 16px; border: 0.5px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 15px; outline: none; }
+    .hint-text { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 6px; }
+
+    .btn { width: 100%; padding: 16px; border-radius: 18px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3); }
-    .btn-green { background: var(--green); color: white; box-shadow: 0 4px 14px rgba(52, 199, 89, 0.3); margin-top: 10px; }
-    .btn-danger { background: rgba(255, 59, 48, 0.12); color: var(--red); margin-top: 10px; }
+    .btn-green { background: var(--green); color: white; box-shadow: 0 4px 14px rgba(52, 199, 89, 0.3); }
+    .btn-danger { background: rgba(255, 59, 48, 0.12); color: var(--red); }
 
     .counter-grid { display: flex; gap: 8px; margin: 18px 0; }
     .btn-counter { flex: 1; padding: 14px; background: var(--input-bg); border: none; border-radius: 14px; font-weight: 800; color: var(--text); font-size: 16px; cursor: pointer; }
 
-    /* Navbar */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 0.5px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0 28px 0; max-width: 600px; margin: 0 auto; z-index: 90; }
     .nav-item { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--sub-text); font-size: 10px; font-weight: 700; cursor: pointer; width: 20%; }
     .nav-item.active { color: var(--accent); }
@@ -168,17 +146,17 @@
 </head>
 <body>
 
-  <!-- AÇILIŞ EKRANI -->
+  <!-- SPLASH EKRANI -->
   <div id="splash-screen">
     <div class="splash-title">ÖDEV TAKİP ÇİZELGESİ</div>
     <div class="splash-author">BY ATEŞ SEPETÇİ</div>
   </div>
 
-  <!-- KAYIT EKRANI -->
+  <!-- ONBOARDING -->
   <div id="onboarding-screen" style="display: none;">
     <div class="onboarding-card">
       <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Hoş Geldin! 👋</h2>
-      <p style="color: var(--sub-text); font-size: 13px; margin-bottom: 20px;">Lütfen sınıfını ve alanını seçerek başla.</p>
+      <p style="color: var(--sub-text); font-size: 13px; margin-bottom: 20px;">Sınıfını ve alanını seçerek başla.</p>
       
       <form onsubmit="completeRegistration(event)">
         <div class="form-group"><label>Adın Soyadın</label><input type="text" id="reg-name" class="form-control" placeholder="Adını yaz..." required></div>
@@ -198,20 +176,13 @@
           <label id="label-field">Alan Seçimi</label>
           <select id="reg-field" class="form-control"></select>
         </div>
-        <div class="form-group" id="group-timer-opt" style="display: none;">
-          <label>YKS Sayacı Gösterilsin mi?</label>
-          <select id="reg-timer-opt" class="form-control">
-            <option value="show">Evet, Göster</option>
-            <option value="hide">Gizle</option>
-          </select>
-        </div>
         <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Devam Et 🚀</button>
       </form>
     </div>
   </div>
 
   <main class="app">
-    <!-- ANA SAYFA -->
+    <!-- ÖDEVLER SEKMESİ -->
     <section id="tab-home" class="tab-content active">
       <header class="header">
         <div>
@@ -222,7 +193,6 @@
         <div class="streak-badge">🔥 <span id="streak-count">0</span> Gün</div>
       </header>
 
-      <!-- Özet Sayaçlar -->
       <div class="summary-grid">
         <div class="summary-card" id="card-overdue" onclick="applyStatusFilter('overdue')">
           <div class="summary-info"><span>Geciken</span><b id="cnt-overdue">0</b></div>
@@ -250,24 +220,7 @@
       <div id="task-list"></div>
     </section>
 
-    <!-- NOTLARIM SEKMESİ -->
-    <section id="tab-notes" class="tab-content">
-      <header class="header">
-        <div>
-          <div class="greeting">KİŞİSEL ALAN</div>
-          <h1 class="app-title">Notlarım</h1>
-        </div>
-        <button class="filter-chip active" onclick="openAddNoteModal()">+ Not Ekle</button>
-      </header>
-
-      <div class="search-box">
-        <input type="text" id="note-search-input" placeholder="Notlarda ara..." oninput="renderNotes()">
-      </div>
-
-      <div id="notes-list"></div>
-    </section>
-
-    <!-- İSTATİSTİK -->
+    <!-- İSTATİSTİK SEKMESİ (ÖĞRENCİ + VELİ) -->
     <section id="tab-stats" class="tab-content">
       <header class="header"><h1 class="app-title">İstatistikler</h1></header>
       
@@ -279,15 +232,33 @@
         <div class="countdown-timer" id="timer-display">0 Gün</div>
       </div>
 
-      <div class="summary-card" style="flex-direction:column; text-align:center; padding: 28px 20px; cursor:default; margin-bottom: 16px;">
-        <h3 style="color: var(--sub-text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Genel Tamamlanma</h3>
-        <h2 id="stats-pct" style="font-size: 52px; font-weight:800; color: var(--accent); margin: 6px 0; letter-spacing: -1px;">%0</h2>
-        <p style="color: var(--sub-text); font-weight: 500;" id="stats-detail">0 ödevden 0 tanesi tamamlandı.</p>
+      <!-- ÖĞRENCİNİN KENDİ GÖRECEĞİ BİRİM BAZLI SAYAC -->
+      <h3 style="font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin-bottom: 10px;">Çözülen / Tamamlanan Metriklerin</h3>
+      <div class="summary-grid" style="margin-bottom: 16px;">
+        <div class="summary-card" style="cursor:default;">
+          <div class="summary-info"><span>Bitirilen Test</span><b id="user-total-tests">0</b></div>
+          <div class="badge-icon bg-purple">🧪</div>
+        </div>
+        <div class="summary-card" style="cursor:default;">
+          <div class="summary-info"><span>Okunan Sayfa</span><b id="user-total-pages">0</b></div>
+          <div class="badge-icon bg-blue">📄</div>
+        </div>
+        <div class="summary-card" style="cursor:default; grid-column: span 2;">
+          <div class="summary-info"><span>Çözülen Soru</span><b id="user-total-questions">0</b></div>
+          <div class="badge-icon bg-green">❓</div>
+        </div>
       </div>
 
-      <!-- WHATSAPP VELİ RAPORU BUTONU -->
-      <button class="btn btn-green" onclick="sendWhatsAppReport()">📲 Veliye / Öğretmene WhatsApp Raporu Gönder</button>
-      <button class="btn btn-danger" style="margin-top: 10px;" onclick="clearCompletedTasks()">🧹 Tamamlanan Ödevleri Temizle</button>
+      <div class="summary-card" style="flex-direction:column; text-align:center; padding: 22px; cursor:default; margin-bottom: 20px;">
+        <h3 style="color: var(--sub-text); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Aktif Ödev Başarı Oranı</h3>
+        <h2 id="stats-pct" style="font-size: 48px; font-weight:800; color: var(--accent); margin: 4px 0;">%0</h2>
+        <p style="color: var(--sub-text); font-weight: 600; font-size: 13px;" id="stats-detail">0 ödevden 0 tanesi tamamlandı.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn btn-green" onclick="sendWhatsAppReport()">📲 Veliye / Öğretmene WhatsApp Raporu Gönder</button>
+        <button class="btn btn-primary" style="background:#5856d6;" onclick="archiveCompletedTasks()">🗓️ Haftayı Tamamla & Listeyi Temizle (Arşivle)</button>
+      </div>
     </section>
 
     <!-- AYARLAR -->
@@ -299,24 +270,23 @@
           <input type="text" id="inp-username" class="form-control" placeholder="Adını yaz..." onchange="saveUsername(this.value)">
         </div>
         <button class="btn btn-primary" onclick="toggleTheme()">🌙 Tema Değiştir</button>
-        
         <button class="btn btn-primary" style="background: #30d158;" onclick="exportBackup()">💾 Verileri Yedekle (İndir)</button>
-        <button class="btn btn-primary" style="background: #5856d6;" onclick="document.getElementById('file-import').click()">📥 Yedeği Geri Yükle</button>
+        <button class="btn btn-primary" style="background: #0a84ff;" onclick="document.getElementById('file-import').click()">📥 Yedeği Geri Yükle</button>
         <input type="file" id="file-import" style="display:none" onchange="importBackup(event)" accept=".json">
-
-        <button class="btn btn-danger" onclick="resetProfile()">🔄 Sınıf & Alan Seçimini Yenile</button>
+        <button class="btn btn-danger" onclick="resetProfile()">🔄 Sınıf & Alan Seçimini Sıfırla</button>
       </div>
     </section>
   </main>
 
-  <!-- ÖDEV EKLE MODAL -->
+  <!-- ÖDEV EKLE / DÜZENLE MODAL -->
   <div class="modal" id="add-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Yeni Ödev Ekle</h2>
+        <h2 id="modal-form-title">Yeni Ödev Ekle</h2>
         <button class="close-btn" onclick="closeModal('add-modal')">✕</button>
       </div>
       <form onsubmit="saveTask(event)">
+        <input type="hidden" id="edit-task-id">
         <div class="form-group">
           <label>Ders</label>
           <select id="inp-subject" class="form-control" onchange="handleSubjectChange(this.value)" required></select>
@@ -325,53 +295,27 @@
           <label>Dersin Adını Yaz</label>
           <input type="text" id="inp-custom-subject" class="form-control" placeholder="Örn: Felsefe, Din vb.">
         </div>
-        <div class="form-group"><label>Yayın</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345" required></div>
+        <div class="form-group"><label>Yayın / Kaynak Adı</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345 Yayınları / Karekök" required></div>
         <div class="form-group"><label>Konu</label><input type="text" id="inp-topic" class="form-control" placeholder="Örn: Paragraf / Üslü Sayılar" required></div>
         
-        <!-- TEST / SAYFA / SORU TÜRÜ SEÇİMİ -->
+        <!-- DİNAMİK TÜRH KONTROLÜ -->
         <div class="form-group">
-          <label>Ödev Türü & Birimi</label>
-          <select id="inp-unit" class="form-control">
-            <option value="Sayfa">📄 Sayfa Bazlı (Örn: 10-15. Sayfalar)</option>
-            <option value="Test">🧪 Test Bazlı (Örn: 4 Test)</option>
-            <option value="Soru">❓ Soru Sayısı (Örn: 50 Soru)</option>
+          <label>Ödev Türü</label>
+          <select id="inp-unit" class="form-control" onchange="updateUnitHint()">
+            <option value="Sayfa">📄 Sayfa Bazlı</option>
+            <option value="Test">🧪 Test Bazlı</option>
+            <option value="Soru">❓ Soru Sayısı</option>
           </select>
         </div>
 
-        <div class="form-group"><label>Miktar / Aralık</label><input type="text" id="inp-range" class="form-control" placeholder="Örn: 5 (Test) veya 10-15 (Sayfa)" required></div>
+        <div class="form-group">
+          <label id="lbl-range">Miktar / Aralık</label>
+          <input type="text" id="inp-range" class="form-control" required>
+          <div class="hint-text" id="unit-hint">Örnek: 10-15 veya 12 Sayfa</div>
+        </div>
+
         <div class="form-group"><label>Son Teslim Tarihi</label><input type="date" id="inp-due" class="form-control" required></div>
-        <button type="submit" class="btn btn-primary">Kaydet</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- NOT EKLE MODAL -->
-  <div class="modal" id="add-note-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 id="note-modal-title">Yeni Not Ekle</h2>
-        <button class="close-btn" onclick="closeModal('add-note-modal')">✕</button>
-      </div>
-      <form onsubmit="saveNote(event)">
-        <input type="hidden" id="inp-note-id">
-        <div class="form-group">
-          <label>Başlık</label>
-          <input type="text" id="inp-note-title" class="form-control" placeholder="Not Başlığı..." required>
-        </div>
-        <div class="form-group">
-          <label>Not İçeriği</label>
-          <textarea id="inp-note-content" class="form-control" placeholder="Notunu buraya yaz..." required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Renk Etiketi</label>
-          <select id="inp-note-color" class="form-control">
-            <option value="blue">🔵 Mavi (Genel)</option>
-            <option value="green">🟢 Yeşil (Önemli)</option>
-            <option value="orange">🟠 Turuncu (Hatırlatma)</option>
-            <option value="red">🔴 Kırmızı (Acil)</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <button type="submit" class="btn btn-primary" id="btn-save-task">Kaydet</button>
       </form>
     </div>
   </div>
@@ -395,24 +339,20 @@
         <button class="btn-counter" onclick="adjustProgress(5)">+5</button>
       </div>
       <button class="btn btn-primary" onclick="saveDetailEdit()">Kaydet</button>
-      <button class="btn btn-danger" onclick="deleteCurrentTask()">🗑️ Ödevi Sil</button>
+      <button class="btn btn-danger" style="margin-top:10px;" onclick="deleteCurrentTask()">🗑️ Ödevi Sil</button>
     </div>
   </div>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <button class="nav-item active" onclick="switchTab('home', this)"><span>🏠</span>Ödevler</button>
-    <button class="nav-item" onclick="switchTab('notes', this)"><span>📝</span>Notlarım</button>
     <button class="nav-item" onclick="openAddModal()"><span>➕</span>Ekle</button>
     <button class="nav-item" onclick="switchTab('stats', this)"><span>📊</span>İstatistik</button>
     <button class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span>Ayarlar</button>
   </nav>
 
   <script>
-    const DB_NAME = "odev_app_v5";
-    const NOTES_DB_NAME = "odev_notes_v5";
+    const DB_NAME = "odev_app_v6";
     let tasks = [];
-    let notes = [];
     let selectedSubject = "Tümü";
     let selectedStatusFilter = null;
     let currentDetailId = null;
@@ -432,17 +372,12 @@
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) splash.classList.add('fade-out');
-      }, 2000);
+      }, 1500);
       init();
     });
 
     function init() {
-      try {
-        tasks = JSON.parse(localStorage.getItem(DB_NAME) || "[]");
-        notes = JSON.parse(localStorage.getItem(NOTES_DB_NAME) || "[]");
-      } catch (e) {
-        tasks = []; notes = [];
-      }
+      try { tasks = JSON.parse(localStorage.getItem(DB_NAME) || "[]"); } catch (e) { tasks = []; }
 
       const storedUser = localStorage.getItem("odev_user_profile");
       if (!storedUser) {
@@ -455,27 +390,24 @@
       const dueInp = document.getElementById('inp-due');
       if (dueInp) dueInp.valueAsDate = new Date();
 
+      updateUnitHint();
       saveData();
-      renderNotes();
     }
 
     function handleClassChange(val) {
       const fieldGroup = document.getElementById('group-field');
-      const timerGroup = document.getElementById('group-timer-opt');
       const fieldSelect = document.getElementById('reg-field');
       const fieldLabel = document.getElementById('label-field');
 
-      if (!val) { fieldGroup.style.display = 'none'; timerGroup.style.display = 'none'; return; }
+      if (!val) { fieldGroup.style.display = 'none'; return; }
       fieldGroup.style.display = 'block';
 
       if (val === "8") {
         fieldLabel.innerText = "LGS Odak Seçimi";
         fieldSelect.innerHTML = `<option value="Sayısal Ağırlıklı">Sayısal Ağırlıklı</option><option value="Sözel Ağırlıklı">Sözel Ağırlıklı</option><option value="Dengeli LGS">Dengeli LGS</option>`;
-        timerGroup.style.display = 'none';
       } else {
         fieldLabel.innerText = "Alan Seçimi";
         fieldSelect.innerHTML = `<option value="Sayısal">Sayısal</option><option value="Eşit Ağırlık">Eşit Ağırlık</option><option value="Sözel">Sözel</option><option value="Dil">Dil</option>`;
-        timerGroup.style.display = (val === "9" || val === "10") ? 'block' : 'none';
       }
     }
 
@@ -484,8 +416,7 @@
       userData = {
         name: document.getElementById('reg-name').value.trim(),
         classLevel: document.getElementById('reg-class').value,
-        field: document.getElementById('reg-field').value,
-        showTimerIn910: document.getElementById('reg-timer-opt').value === 'show'
+        field: document.getElementById('reg-field').value
       };
       localStorage.setItem("odev_user_profile", JSON.stringify(userData));
       document.getElementById('onboarding-screen').style.display = 'none';
@@ -516,8 +447,7 @@
     }
 
     function handleSubjectChange(val) {
-      const customGroup = document.getElementById('custom-subject-group');
-      customGroup.style.display = val === "OTHER_CUSTOM" ? 'block' : 'none';
+      document.getElementById('custom-subject-group').style.display = val === "OTHER_CUSTOM" ? 'block' : 'none';
     }
 
     function setupCountdown() {
@@ -531,7 +461,7 @@
         targetDate = new Date(`${currentYear}-06-07T09:30:00`);
         if (now > targetDate) targetDate = new Date(`${currentYear + 1}-06-07T09:30:00`);
         titleText = "🏆 LGS GERİ SAYIM";
-      } else if (["11", "12", "Mezun"].includes(userData.classLevel) || userData.showTimerIn910) {
+      } else {
         let yearsToAdd = userData.classLevel === "11" ? 2 : (userData.classLevel === "9" ? 3 : (userData.classLevel === "10" ? 2 : 0));
         targetDate = new Date(`${currentYear + yearsToAdd}-06-20T10:15:00`);
         if (now > targetDate) targetDate = new Date(`${currentYear + 1}-06-20T10:15:00`);
@@ -551,93 +481,140 @@
       if (diff > 0) {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         document.getElementById('timer-display').innerText = `${days} Gün`;
-      } else {
-        document.getElementById('timer-display').innerText = "Sınav Günü!";
       }
     }
 
-    /* NOT YÖNETİMİ */
-    function renderNotes() {
-      const container = document.getElementById('notes-list');
-      const search = (document.getElementById('note-search-input').value || "").toLowerCase();
+    /* DİNAMİK TÜRH VE INPUT DOĞRULAMA (VALIDATION) */
+    function updateUnitHint() {
+      const unit = document.getElementById('inp-unit').value;
+      const hint = document.getElementById('unit-hint');
+      const inp = document.getElementById('inp-range');
 
-      const filtered = notes.filter(n => n.title.toLowerCase().includes(search) || n.content.toLowerCase().includes(search));
+      if (unit === "Sayfa") {
+        hint.innerText = "Örnek: 10-15 veya 20 Sayfa (Yalnızca sayfa sayısı giriniz)";
+        inp.placeholder = "Örn: 10-15";
+      } else if (unit === "Test") {
+        hint.innerText = "Örnek: 4 veya Test 1-4 (Yalnızca test miktarı giriniz)";
+        inp.placeholder = "Örn: 4";
+      } else if (unit === "Soru") {
+        hint.innerText = "Örnek: 50 veya 100 Soru (Yalnızca soru sayısı giriniz)";
+        inp.placeholder = "Örn: 50";
+      }
+    }
 
-      if (!filtered.length) {
-        container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--sub-text); font-weight:600;">Henüz kaydedilmiş not yok.</div>`;
+    function validateUnitInput(unit, text) {
+      const lower = text.toLowerCase();
+      if (unit === "Sayfa" && (lower.includes("test") || lower.includes("soru"))) {
+        alert("Ödev türünü 'Sayfa' seçtiniz. Lütfen metin içine 'Test' veya 'Soru' yazmayınız!");
+        return false;
+      }
+      if (unit === "Test" && (lower.includes("sayfa") || lower.includes("soru"))) {
+        alert("Ödev türünü 'Test' seçtiniz. Lütfen metin içine 'Sayfa' veya 'Soru' yazmayınız!");
+        return false;
+      }
+      if (unit === "Soru" && (lower.includes("sayfa") || lower.includes("test"))) {
+        alert("Ödev türünü 'Soru' seçtiniz. Lütfen metin içine 'Sayfa' veya 'Test' yazmayınız!");
+        return false;
+      }
+      return true;
+    }
+
+    /* ÖDEV EKLE VE DÜZENLE */
+    function openAddModal(editId = null) {
+      const modal = document.getElementById('add-modal');
+      const form = modal.querySelector('form');
+      form.reset();
+      document.getElementById('edit-task-id').value = "";
+
+      if (editId) {
+        const t = tasks.find(x => x.id === editId);
+        if (t) {
+          document.getElementById('modal-form-title').innerText = "Ödevi Düzenle";
+          document.getElementById('edit-task-id').value = t.id;
+          document.getElementById('inp-subject').value = t.subject;
+          document.getElementById('inp-publisher').value = t.publisher;
+          document.getElementById('inp-topic').value = t.topic;
+          document.getElementById('inp-unit').value = t.unit || "Sayfa";
+          document.getElementById('inp-range').value = t.range;
+          document.getElementById('inp-due').value = t.dueDate;
+        }
+      } else {
+        document.getElementById('modal-form-title').innerText = "Yeni Ödev Ekle";
+        document.getElementById('inp-due').valueAsDate = new Date();
+      }
+      updateUnitHint();
+      modal.classList.add('active');
+    }
+
+    function saveTask(e) {
+      e.preventDefault();
+      const editId = document.getElementById('edit-task-id').value;
+      const unit = document.getElementById('inp-unit').value;
+      const range = document.getElementById('inp-range').value.trim();
+
+      if (!validateUnitInput(unit, range)) return;
+
+      const selectVal = document.getElementById('inp-subject').value;
+      const finalSubject = selectVal === "OTHER_CUSTOM" ? (document.getElementById('inp-custom-subject').value.trim() || "Diğer") : selectVal;
+      const totalPages = parsePageCount(range);
+
+      if (editId) {
+        const t = tasks.find(x => x.id === editId);
+        if (t) {
+          t.subject = finalSubject;
+          t.publisher = document.getElementById('inp-publisher').value;
+          t.topic = document.getElementById('inp-topic').value;
+          t.unit = unit;
+          t.range = range;
+          t.totalCount = totalPages;
+          t.dueDate = document.getElementById('inp-due').value;
+        }
+      } else {
+        tasks.push({
+          id: Date.now().toString(),
+          subject: finalSubject,
+          publisher: document.getElementById('inp-publisher').value,
+          topic: document.getElementById('inp-topic').value,
+          unit: unit,
+          range: range,
+          totalCount: totalPages,
+          completedCount: 0,
+          dueDate: document.getElementById('inp-due').value,
+          completed: false,
+          archived: false
+        });
+      }
+
+      saveData();
+      closeModal('add-modal');
+    }
+
+    /* HAFTALIK ARŞİVLEME */
+    function archiveCompletedTasks() {
+      const activeCompleted = tasks.filter(t => !t.archived && (t.completed || t.completedCount >= t.totalCount));
+      if (!activeCompleted.length) {
+        alert("Temizlenecek/Arşivlenecek tamamlanmış ödev bulunamadı.");
         return;
       }
 
-      container.innerHTML = filtered.map(n => `
-        <div class="note-card note-${n.color || 'blue'}">
-          <div class="note-header">
-            <div class="note-title">${n.title}</div>
-            <div class="note-date">${n.date}</div>
-          </div>
-          <div class="note-content">${n.content}</div>
-          <div class="note-actions">
-            <button class="note-btn" onclick="editNote('${n.id}')">✏️ Düzenle</button>
-            <button class="note-btn" style="color:var(--red)" onclick="deleteNote('${n.id}')">🗑️ Sil</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openAddNoteModal() {
-      document.getElementById('note-modal-title').innerText = "Yeni Not Ekle";
-      document.getElementById('inp-note-id').value = "";
-      document.getElementById('inp-note-title').value = "";
-      document.getElementById('inp-note-content').value = "";
-      document.getElementById('add-note-modal').classList.add('active');
-    }
-
-    function saveNote(e) {
-      e.preventDefault();
-      const id = document.getElementById('inp-note-id').value;
-      const title = document.getElementById('inp-note-title').value.trim();
-      const content = document.getElementById('inp-note-content').value.trim();
-      const color = document.getElementById('inp-note-color').value;
-      const date = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
-
-      if (id) {
-        const note = notes.find(n => n.id === id);
-        if (note) { note.title = title; note.content = content; note.color = color; }
-      } else {
-        notes.unshift({ id: Date.now().toString(), title, content, color, date });
+      if (confirm(`${activeCompleted.length} adet tamamlanan ödev arşivlensin ve ana ekrandan kaldırılsın mı?\n(Not: İstatistiklerin ve veli analiz verilerin korunacaktır.)`)) {
+        activeCompleted.forEach(t => t.archived = true);
+        saveData();
+        alert("Tamamlanan ödevler başarıyla arşivlendi! Yeni haftaya hazırsın 🔥");
       }
-
-      localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
-      renderNotes();
-      closeModal('add-note-modal');
     }
 
-    function editNote(id) {
-      const n = notes.find(x => x.id === id);
-      if (!n) return;
-      document.getElementById('note-modal-title').innerText = "Notu Düzenle";
-      document.getElementById('inp-note-id').value = n.id;
-      document.getElementById('inp-note-title').value = n.title;
-      document.getElementById('inp-note-content').value = n.content;
-      document.getElementById('inp-note-color').value = n.color || "blue";
-      document.getElementById('add-note-modal').classList.add('active');
-    }
-
-    function deleteNote(id) {
-      notes = notes.filter(n => n.id !== id);
-      localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
-      renderNotes();
-    }
-
-    /* 📲 TEST ENTEGRELİ VELİ RAPORU */
+    /* WHATSAPP VELİ RAPORU (YAYIN EKLENDİ) */
     function sendWhatsAppReport() {
-      if (!tasks.length) { alert("Rapor gönderilecek ödev bulunamadı."); return; }
-      const total = tasks.length;
-      const completedTasks = tasks.filter(t => t.completed || t.completedCount >= t.totalCount);
+      const activeTasks = tasks.filter(t => !t.archived);
+      if (!activeTasks.length) { alert("Rapor gönderilecek aktif ödev bulunamadı."); return; }
+      
+      const total = activeTasks.length;
+      const completedTasks = activeTasks.filter(t => t.completed || t.completedCount >= t.totalCount);
       const completedCount = completedTasks.length;
-      const overdue = tasks.filter(t => getTaskCategory(t) === 'overdue').length;
+      const overdue = activeTasks.filter(t => getTaskCategory(t) === 'overdue').length;
       const pct = Math.round((completedCount / total) * 100);
 
-      // Türlerine göre (Test/Sayfa/Soru) toplam hesaplama
       let totalPages = 0, totalTests = 0, totalQuestions = 0;
       tasks.forEach(t => {
         let count = (t.completed || t.completedCount >= t.totalCount) ? (t.totalCount || 10) : (t.completedCount || 0);
@@ -662,11 +639,11 @@
       text += `• *Ödev Başarı Oranı:* 🔥 %${pct}\n`;
       text += `• *Tamamlanan Ödev:* ${completedCount} / ${total}\n`;
       text += `• *Geciken Ödev:* ${overdue}\n`;
-      text += `• *Tamamlanan Toplam:* ${totalsSummary.join(' / ') || '0 Ödev'}\n`;
+      text += `• *Genel Toplam:* ${totalsSummary.join(' / ') || '0 Ödev'}\n`;
       text += `──────────────────\n\n`;
       text += `📚 *ÖDEV DETAYLARI*\n`;
 
-      tasks.forEach(t => {
+      activeTasks.forEach(t => {
         const isDone = t.completed || t.completedCount >= t.totalCount;
         const statusIcon = isDone ? "✅" : (getTaskCategory(t) === 'overdue' ? "❌" : "⏳");
         const totalP = t.totalCount || 10;
@@ -674,7 +651,7 @@
         const unit = t.unit || "Sayfa";
         const dateFormatted = t.dueDate ? t.dueDate.split('-').reverse().slice(0,2).join('/') : '-';
 
-        text += `• *${t.subject}* - ${t.topic} ➔ ${statusIcon} *${curP}/${totalP} ${unit}* (Son Tarih: ${dateFormatted})\n`;
+        text += `• *${t.subject}* (${t.publisher}) - ${t.topic} ➔ ${statusIcon} *${curP}/${totalP} ${unit}* (Son Tarih: ${dateFormatted})\n`;
       });
 
       text += `\n──────────────────\n`;
@@ -682,46 +659,6 @@
 
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank');
-    }
-
-    function exportBackup() {
-      const data = { tasks, notes, userData };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `odev_takip_yedek_${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-    }
-
-    function importBackup(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try {
-          const imported = JSON.parse(evt.target.result);
-          if (imported.tasks) tasks = imported.tasks;
-          if (imported.notes) notes = imported.notes;
-          if (imported.userData) userData = imported.userData;
-
-          localStorage.setItem(DB_NAME, JSON.stringify(tasks));
-          localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
-          if (userData) localStorage.setItem("odev_user_profile", JSON.stringify(userData));
-
-          alert("Veriler başarıyla yüklendi! 🎉");
-          location.reload();
-        } catch (err) {
-          alert("Geçersiz yedek dosyası!");
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function clearCompletedTasks() {
-      if (confirm("Tamamlanan ödevleri silmek istediğine emin misin?")) {
-        tasks = tasks.filter(t => !t.completed && t.completedCount < t.totalCount);
-        saveData();
-      }
     }
 
     function parsePageCount(rangeStr) {
@@ -780,18 +717,33 @@
     }
 
     function renderDashboard() {
+      const activeTasks = tasks.filter(t => !t.archived);
       const counts = { overdue: 0, today: 0, upcoming: 0, completed: 0 };
-      tasks.forEach(t => counts[getTaskCategory(t)]++);
+      activeTasks.forEach(t => counts[getTaskCategory(t)]++);
 
       document.getElementById('cnt-overdue').innerText = counts.overdue;
       document.getElementById('cnt-today').innerText = counts.today;
       document.getElementById('cnt-upcoming').innerText = counts.upcoming;
       document.getElementById('cnt-completed').innerText = counts.completed;
 
-      const total = tasks.length, comp = counts.completed;
+      const total = activeTasks.length, comp = counts.completed;
       const pct = total ? Math.round((comp / total) * 100) : 0;
       document.getElementById('stats-pct').innerText = `%${pct}`;
-      document.getElementById('stats-detail').innerText = `${total} ödevden ${comp} tanesi tamamlandı.`;
+      document.getElementById('stats-detail').innerText = `${total} aktif ödevden ${comp} tanesi tamamlandı.`;
+
+      // ÖĞRENCİ KİŞİSEL İSTATİSTİKLERİ (ARŞİVLİLER DAHİL GENEL TOPLAM)
+      let uPages = 0, uTests = 0, uQuestions = 0;
+      tasks.forEach(t => {
+        let count = (t.completed || t.completedCount >= t.totalCount) ? (t.totalCount || 10) : (t.completedCount || 0);
+        let unit = t.unit || "Sayfa";
+        if (unit === "Test") uTests += count;
+        else if (unit === "Soru") uQuestions += count;
+        else uPages += count;
+      });
+
+      document.getElementById('user-total-tests').innerText = `${uTests} Test`;
+      document.getElementById('user-total-pages').innerText = `${uPages} Sayfa`;
+      document.getElementById('user-total-questions').innerText = `${uQuestions} Soru`;
     }
 
     function renderTasks() {
@@ -799,6 +751,7 @@
       const search = (document.getElementById('search-input').value || "").toLowerCase();
 
       let filtered = tasks.filter(t => {
+        if (t.archived) return false;
         let matchesSubject = selectedSubject === "Tümü" || (t.subject || "").toLowerCase() === selectedSubject.toLowerCase();
         let matchesSearch = (t.topic || "").toLowerCase().includes(search) || (t.publisher || "").toLowerCase().includes(search) || (t.subject || "").toLowerCase().includes(search);
         let matchesStatus = !selectedStatusFilter || getTaskCategory(t) === selectedStatusFilter;
@@ -838,40 +791,13 @@
                 <span>%${pct}</span>
               </div>
             </div>
+            <button class="edit-task-btn" onclick="openAddModal('${t.id}')">✏️</button>
           </div>
         `;
       }).join('');
     }
 
-    function openAddModal() { document.getElementById('add-modal').classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-    function saveTask(e) {
-      e.preventDefault();
-      const selectVal = document.getElementById('inp-subject').value;
-      const finalSubject = selectVal === "OTHER_CUSTOM" ? (document.getElementById('inp-custom-subject').value.trim() || "Diğer") : selectVal;
-      const range = document.getElementById('inp-range').value;
-      const unit = document.getElementById('inp-unit').value;
-      const totalPages = parsePageCount(range);
-
-      tasks.push({
-        id: Date.now().toString(),
-        subject: finalSubject,
-        publisher: document.getElementById('inp-publisher').value,
-        topic: document.getElementById('inp-topic').value,
-        unit: unit,
-        range: range,
-        totalCount: totalPages,
-        completedCount: 0,
-        dueDate: document.getElementById('inp-due').value,
-        completed: false
-      });
-
-      saveData();
-      closeModal('add-modal');
-      e.target.reset();
-      document.getElementById('custom-subject-group').style.display = 'none';
-    }
 
     function openDetailModal(id) {
       currentDetailId = id;
@@ -906,9 +832,11 @@
     }
 
     function deleteCurrentTask() {
-      tasks = tasks.filter(x => x.id !== currentDetailId);
-      saveData();
-      closeModal('detail-modal');
+      if (confirm("Bu ödevi silmek istediğine emin misin?")) {
+        tasks = tasks.filter(x => x.id !== currentDetailId);
+        saveData();
+        closeModal('detail-modal');
+      }
     }
 
     function setSubjectFilter(subj, el) {
@@ -944,10 +872,40 @@
     }
 
     function resetProfile() {
-      if (confirm("Sınıf ve alan bilgini sıfırlamak istediğine emin misin?")) {
+      if (confirm("Sınıf ve alan seçimini sıfırlamak istediğine emin misin?")) {
         localStorage.removeItem("odev_user_profile");
         location.reload();
       }
+    }
+
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify({ tasks, userData }, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `odev_takip_yedek_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+    }
+
+    function importBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          if (imported.tasks) tasks = imported.tasks;
+          if (imported.userData) userData = imported.userData;
+
+          localStorage.setItem(DB_NAME, JSON.stringify(tasks));
+          if (userData) localStorage.setItem("odev_user_profile", JSON.stringify(userData));
+
+          alert("Veriler başarıyla yüklendi! 🎉");
+          location.reload();
+        } catch (err) {
+          alert("Geçersiz yedek dosyası!");
+        }
+      };
+      reader.readAsText(file);
     }
   </script>
 </body>
