@@ -100,8 +100,12 @@
     .task-card, .note-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 22px; padding: 18px; margin-bottom: 14px; border: 0.5px solid var(--border); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow); position: relative; }
     .task-card { display: flex; gap: 14px; align-items: center; }
     .task-card.completed-card { opacity: 0.5; }
+    .task-card.disabled-card { opacity: 0.6; background: rgba(255, 59, 48, 0.05); }
+
     .check-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--sub-text); background: transparent; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; color: white; transition: all 0.2s; }
     .check-btn.checked { background: var(--green); border-color: var(--green); }
+    .check-btn:disabled { border-color: var(--red); background: rgba(255, 59, 48, 0.2); cursor: not-allowed; color: var(--red); }
+
     .task-body { flex: 1; min-width: 0; cursor: pointer; }
     .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding-right: 28px; }
     .subject-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -115,11 +119,19 @@
     
     .edit-task-btn { position: absolute; right: 16px; top: 16px; background: var(--input-bg); border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
+    /* RENKLİ NOT KARTLARI */
+    .note-card { border-left: 6px solid var(--accent); }
+    .note-card.red { border-left-color: var(--red); }
+    .note-card.yellow { border-left-color: var(--orange); }
+    .note-card.green { border-left-color: var(--green); }
+    .note-card.blue { border-left-color: var(--accent); }
+    
     .note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .note-title { font-size: 16px; font-weight: 700; }
+    .note-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
     .note-date { font-size: 11px; color: var(--sub-text); font-weight: 600; }
     .note-text { font-size: 14px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
-    .note-del-btn { background: rgba(255, 59, 48, 0.12); color: var(--red); border: none; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .note-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+    .note-btn { background: var(--input-bg); border: none; padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--text); }
 
     /* Modal */
     .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: flex-end; justify-content: center; z-index: 100; transition: all 0.3s; }
@@ -149,6 +161,10 @@
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+
+    .color-picker { display: flex; gap: 10px; margin-top: 6px; }
+    .color-opt { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+    .color-opt.selected { border-color: var(--text); }
   </style>
 </head>
 <body>
@@ -227,7 +243,7 @@
       <div id="task-list"></div>
     </section>
 
-    <!-- NOTLAR SEKMESİ (EK SIFIRDAN GERİ EKLENDİ) -->
+    <!-- RENKLİ VE İĞNELEMELİ NOTLAR SEKMESİ -->
     <section id="tab-notes" class="tab-content">
       <header class="header">
         <h1 class="app-title">Notlarım</h1>
@@ -236,7 +252,7 @@
       <div id="notes-list"></div>
     </section>
 
-    <!-- İSTATİSTİK SEKMESİ (SAYAÇ POZİSYONU DÜZELTİLDİ) -->
+    <!-- İSTATİSTİK SEKMESİ -->
     <section id="tab-stats" class="tab-content">
       <header class="header"><h1 class="app-title">İstatistikler</h1></header>
       
@@ -249,8 +265,8 @@
         <div class="countdown-timer" id="timer-display-top">0 Gün</div>
       </div>
 
-      <!-- ÇÖZÜLEN METRİKLER (OKUNAN SAYFA -> ÇÖZÜLEN SAYFA OLARAK DÜZELTİLDİ) -->
-      <h3 style="font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin-bottom: 10px;">Çözülen / Tamamlanan Metriklerin</h3>
+      <!-- ÇÖZÜLEN VE TAMAMLANAN (DÜZELTİLDİ) -->
+      <h3 style="font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin-bottom: 10px;">Çözülen ve Tamamlanan</h3>
       <div class="summary-grid" style="margin-bottom: 16px;">
         <div class="summary-card" style="cursor:default;">
           <div class="summary-info"><span>Bitirilen Test</span><b id="user-total-tests">0</b></div>
@@ -321,7 +337,10 @@
           <label>Dersin Adını Yaz</label>
           <input type="text" id="inp-custom-subject" class="form-control" placeholder="Örn: Felsefe, Din vb.">
         </div>
-        <div class="form-group"><label>Yayın / Kaynak Adı</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345 Yayınları / Karekök" required></div>
+        <div class="form-group">
+          <label>Yayın / Kaynak Adı</label>
+          <input type="text" id="inp-publisher" class="form-control" placeholder="Örn: Bilgi Sarmal / Hız Yayınları" required>
+        </div>
         <div class="form-group"><label>Konu</label><input type="text" id="inp-topic" class="form-control" placeholder="Örn: Paragraf / Üslü Sayılar" required></div>
         
         <div class="form-group">
@@ -334,9 +353,9 @@
         </div>
 
         <div class="form-group">
-          <label id="lbl-range">Miktar / Aralık</label>
-          <input type="text" id="inp-range" class="form-control" required>
-          <div class="hint-text" id="unit-hint">Örnek: 10-15 veya 12 Sayfa</div>
+          <label id="lbl-range">Miktar / Aralık (Sadece Sayı)</label>
+          <input type="text" id="inp-range" class="form-control" inputmode="numeric" placeholder="Örn: 10-15 veya 20" required>
+          <div class="hint-text" id="unit-hint">Örnek: 10-15 veya 12</div>
         </div>
 
         <div class="form-group"><label>Son Teslim Tarihi</label><input type="date" id="inp-due" class="form-control" required></div>
@@ -356,6 +375,15 @@
         <div class="form-group">
           <label>Not Başlığı</label>
           <input type="text" id="note-title-inp" class="form-control" placeholder="Örn: Sınav Takvimi / Formüller" required>
+        </div>
+        <div class="form-group">
+          <label>Not Rengi / Kategorisi</label>
+          <div class="color-picker">
+            <div class="color-opt selected" style="background:#0a84ff;" data-color="blue" onclick="selectNoteColor(this)"></div>
+            <div class="color-opt" style="background:#ff3b30;" data-color="red" onclick="selectNoteColor(this)"></div>
+            <div class="color-opt" style="background:#ff9500;" data-color="yellow" onclick="selectNoteColor(this)"></div>
+            <div class="color-opt" style="background:#34c759;" data-color="green" onclick="selectNoteColor(this)"></div>
+          </div>
         </div>
         <div class="form-group">
           <label>Not İçeriği</label>
@@ -389,7 +417,7 @@
     </div>
   </div>
 
-  <!-- ALT NAVİGASYON (NOTLAR MENÜSÜ EKLENDİ) -->
+  <!-- NAVİGASYON -->
   <nav class="navbar">
     <button class="nav-item active" onclick="switchTab('home', this)"><span>🏠</span>Ödevler</button>
     <button class="nav-item" onclick="switchTab('notes', this)"><span>📝</span>Notlar</button>
@@ -399,14 +427,15 @@
   </nav>
 
   <script>
-    const DB_NAME = "odev_app_v6";
-    const NOTES_DB_NAME = "odev_app_notes_v1";
+    const DB_NAME = "odev_app_v7";
+    const NOTES_DB_NAME = "odev_app_notes_v2";
     let tasks = [];
     let notes = [];
     let selectedSubject = "Tümü";
     let selectedStatusFilter = null;
     let currentDetailId = null;
     let userData = null;
+    let selectedColor = "blue";
 
     const LESSON_MAP = {
       "8": ["Matematik", "Fen Bilimleri", "Türkçe", "T.C. İnkılap Tarihi", "İngilizce", "Din Kültürü"],
@@ -425,6 +454,14 @@
       }, 1500);
       init();
     });
+
+    /* KELİMELERİN BAŞ HARFİNİ BÜYÜK YAPAN YARDIMCI FONKSİYON (TITLE CASE) */
+    function toTitleCase(str) {
+      if (!str) return "";
+      return str.toLocaleLowerCase('tr-TR').split(' ').map(word => {
+        return word.charAt(0).toLocaleUpperCase('tr-TR') + word.slice(1);
+      }).join(' ');
+    }
 
     function init() {
       try { tasks = JSON.parse(localStorage.getItem(DB_NAME) || "[]"); } catch (e) { tasks = []; }
@@ -466,7 +503,7 @@
     function completeRegistration(e) {
       e.preventDefault();
       userData = {
-        name: document.getElementById('reg-name').value.trim(),
+        name: toTitleCase(document.getElementById('reg-name').value.trim()),
         classLevel: document.getElementById('reg-class').value,
         field: document.getElementById('reg-field').value
       };
@@ -502,7 +539,6 @@
       document.getElementById('custom-subject-group').style.display = val === "OTHER_CUSTOM" ? 'block' : 'none';
     }
 
-    /* GERİ SAYIM YERLEŞİM KONTROLÜ (8 VE 12 EN ÜST, DİĞERLERİ EN ALT) */
     function setupCountdown() {
       const topWrapper = document.getElementById('countdown-wrapper-top');
       const bottomWrapper = document.getElementById('countdown-wrapper-bottom');
@@ -548,7 +584,13 @@
       }
     }
 
-    /* NOT İŞLEMLERİ */
+    /* RENKLİ NOTLAR İŞLEMLERİ */
+    function selectNoteColor(el) {
+      document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedColor = el.getAttribute('data-color');
+    }
+
     function openNoteModal() {
       document.getElementById('note-title-inp').value = "";
       document.getElementById('note-text-inp').value = "";
@@ -563,14 +605,26 @@
 
       notes.unshift({
         id: Date.now().toString(),
-        title: title,
+        title: toTitleCase(title),
         text: text,
+        color: selectedColor || "blue",
+        pinned: false,
         date: new Date().toLocaleDateString('tr-TR')
       });
 
       localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
       renderNotes();
       closeModal('note-modal');
+    }
+
+    function togglePinNote(id) {
+      const n = notes.find(x => x.id === id);
+      if (n) {
+        n.pinned = !n.pinned;
+        notes.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+        localStorage.setItem(NOTES_DB_NAME, JSON.stringify(notes));
+        renderNotes();
+      }
     }
 
     function deleteNote(id) {
@@ -588,52 +642,32 @@
         return;
       }
       container.innerHTML = notes.map(n => `
-        <div class="note-card">
+        <div class="note-card ${n.color || 'blue'}">
           <div class="note-header">
-            <span class="note-title">${n.title}</span>
+            <span class="note-title">${n.pinned ? '📌 ' : ''}${n.title}</span>
             <span class="note-date">${n.date}</span>
           </div>
           <div class="note-text">${n.text}</div>
-          <div style="text-align:right; margin-top:10px;">
-            <button class="note-del-btn" onclick="deleteNote('${n.id}')">Sil 🗑️</button>
+          <div class="note-actions">
+            <button class="note-btn" onclick="togglePinNote('${n.id}')">${n.pinned ? 'İğneyi Kaldır' : '📌 Başa İğnele'}</button>
+            <button class="note-btn" style="color:var(--red);" onclick="deleteNote('${n.id}')">Sil 🗑️</button>
           </div>
         </div>
       `).join('');
     }
 
-    /* DİNAMİK TÜRH VE INPUT DOĞRULAMA (VALIDATION) */
     function updateUnitHint() {
       const unit = document.getElementById('inp-unit').value;
       const hint = document.getElementById('unit-hint');
       const inp = document.getElementById('inp-range');
 
       if (unit === "Sayfa") {
-        hint.innerText = "Örnek: 10-15 veya 20 Sayfa (Yalnızca sayfa sayısı giriniz)";
-        inp.placeholder = "Örn: 10-15";
+        hint.innerText = "Sadece sayfa sayısı veya aralığı (Örn: 10-15)";
       } else if (unit === "Test") {
-        hint.innerText = "Örnek: 4 veya Test 1-4 (Yalnızca test miktarı giriniz)";
-        inp.placeholder = "Örn: 4";
+        hint.innerText = "Sadece çözülecek test sayısı (Örn: 4)";
       } else if (unit === "Soru") {
-        hint.innerText = "Örnek: 50 veya 100 Soru (Yalnızca soru sayısı giriniz)";
-        inp.placeholder = "Örn: 50";
+        hint.innerText = "Sadece çözülecek soru sayısı (Örn: 50)";
       }
-    }
-
-    function validateUnitInput(unit, text) {
-      const lower = text.toLowerCase();
-      if (unit === "Sayfa" && (lower.includes("test") || lower.includes("soru"))) {
-        alert("Ödev türünü 'Sayfa' seçtiniz. Lütfen metin içine 'Test' veya 'Soru' yazmayınız!");
-        return false;
-      }
-      if (unit === "Test" && (lower.includes("sayfa") || lower.includes("soru"))) {
-        alert("Ödev türünü 'Test' seçtiniz. Lütfen metin içine 'Sayfa' veya 'Soru' yazmayınız!");
-        return false;
-      }
-      if (unit === "Soru" && (lower.includes("sayfa") || lower.includes("test"))) {
-        alert("Ödev türünü 'Soru' seçtiniz. Lütfen metin içine 'Sayfa' veya 'Test' yazmayınız!");
-        return false;
-      }
-      return true;
     }
 
     /* ÖDEV EKLE VE DÜZENLE */
@@ -669,18 +703,25 @@
       const unit = document.getElementById('inp-unit').value;
       const range = document.getElementById('inp-range').value.trim();
 
-      if (!validateUnitInput(unit, range)) return;
+      // Sadece sayı kontrolü
+      if (!/^[0-9\-\s]+$/.test(range)) {
+        alert("Lütfen miktar/aralık kısmına harf yazmayınız! Sadece sayı giriniz (Örn: 10-15 veya 20).");
+        return;
+      }
 
       const selectVal = document.getElementById('inp-subject').value;
-      const finalSubject = selectVal === "OTHER_CUSTOM" ? (document.getElementById('inp-custom-subject').value.trim() || "Diğer") : selectVal;
+      const finalSubject = selectVal === "OTHER_CUSTOM" ? toTitleCase(document.getElementById('inp-custom-subject').value.trim() || "Diğer") : selectVal;
+      const formattedPublisher = toTitleCase(document.getElementById('inp-publisher').value.trim());
+      const formattedTopic = toTitleCase(document.getElementById('inp-topic').value.trim());
+
       const totalPages = parsePageCount(range);
 
       if (editId) {
         const t = tasks.find(x => x.id === editId);
         if (t) {
           t.subject = finalSubject;
-          t.publisher = document.getElementById('inp-publisher').value;
-          t.topic = document.getElementById('inp-topic').value;
+          t.publisher = formattedPublisher;
+          t.topic = formattedTopic;
           t.unit = unit;
           t.range = range;
           t.totalCount = totalPages;
@@ -690,8 +731,8 @@
         tasks.push({
           id: Date.now().toString(),
           subject: finalSubject,
-          publisher: document.getElementById('inp-publisher').value,
-          topic: document.getElementById('inp-topic').value,
+          publisher: formattedPublisher,
+          topic: formattedTopic,
           unit: unit,
           range: range,
           totalCount: totalPages,
@@ -713,10 +754,10 @@
         return;
       }
 
-      if (confirm(`${activeCompleted.length} adet tamamlanan ödev arşivlensin ve ana ekrandan kaldırılsın mı?\n(Not: İstatistiklerin ve veli analiz verilerin korunacaktır.)`)) {
+      if (confirm(`${activeCompleted.length} adet tamamlanan ödev arşivlensin ve ana ekrandan kaldırılsın mı?\n(Not: İstatistiklerin korunur.)`)) {
         activeCompleted.forEach(t => t.archived = true);
         saveData();
-        alert("Tamamlanan ödevler başarıyla arşivlendi! Yeni haftaya hazırsın 🔥");
+        alert("Tamamlanan ödevler başarıyla arşivlendi! 🔥");
       }
     }
 
@@ -795,10 +836,16 @@
       return "upcoming";
     }
 
+    /* GECİKEN ÖDEVLERİN İŞARETLENMESİNİ ENGELLEME */
     function toggleTask(id, e) {
       if (e) e.stopPropagation();
       const t = tasks.find(x => x.id === id);
       if (t) {
+        if (getTaskCategory(t) === "overdue" && !t.completed) {
+          alert("Bu ödevin teslim süresi geçtiği için tamamlandı olarak işaretlenemez!");
+          return;
+        }
+
         t.completed = !t.completed;
         if (t.completed) {
           t.completedCount = t.totalCount || 10;
@@ -880,26 +927,27 @@
       container.innerHTML = filtered.map(t => {
         const total = t.totalCount || 10;
         const isDone = t.completed || t.completedCount >= total;
+        const isOverdue = getTaskCategory(t) === 'overdue' && !isDone;
         const current = isDone ? total : (t.completedCount || 0);
         const pct = Math.min(100, Math.round((current / total) * 100));
         const unit = t.unit || "Sayfa";
 
         return `
-          <div class="task-card ${isDone ? 'completed-card' : ''}">
-            <button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleTask('${t.id}', event)">
-              ${isDone ? '✓' : ''}
+          <div class="task-card ${isDone ? 'completed-card' : ''} ${isOverdue ? 'disabled-card' : ''}">
+            <button class="check-btn ${isDone ? 'checked' : ''}" ${isOverdue ? 'disabled' : ''} onclick="toggleTask('${t.id}', event)">
+              ${isDone ? '✓' : (isOverdue ? '✕' : '')}
             </button>
             <div class="task-body" onclick="openDetailModal('${t.id}')">
               <div class="task-header">
                 <span class="subject-tag">${t.subject}</span>
                 <span class="pub-tag">${t.publisher}</span>
               </div>
-              <div class="task-title ${isDone ? 'strike' : ''}">${t.topic}</div>
+              <div class="task-title ${isDone ? 'strike' : ''}">${t.topic} ${isOverdue ? '<span style="font-size:11px; color:var(--red); font-weight:800;">(Süresi Doldu)</span>' : ''}</div>
               <div class="task-meta">
                 <span>📖 ${t.range} (${unit})</span>
                 <span>📅 ${(t.dueDate || '').split('-').reverse().slice(0,2).join('/')}</span>
               </div>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%"></div></div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%; ${isOverdue ? 'background:var(--red);' : ''}"></div></div>
               <div class="progress-text">
                 <span>${current} / ${total} ${unit.toLowerCase()}</span>
                 <span>%${pct}</span>
@@ -980,7 +1028,7 @@
     }
 
     function saveUsername(val) {
-      const clean = val.trim();
+      const clean = toTitleCase(val.trim());
       if (userData) { userData.name = clean; localStorage.setItem("odev_user_profile", JSON.stringify(userData)); }
       document.getElementById('user-greeting').innerText = clean ? `Hoş Geldin, ${clean} 👋` : "Hoş Geldin 👋";
     }
