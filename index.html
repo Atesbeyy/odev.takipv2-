@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ödev Takip Pro Edition</title>
   
-  <!-- Kapak Fotoğrafı / App Icon -->
   <link rel="apple-touch-icon" href="https://i.ibb.co/BYd0JBy/image.jpg">
   <link rel="icon" type="image/jpeg" href="https://i.ibb.co/BYd0JBy/image.jpg">
   <meta name="apple-mobile-web-app-title" content="Ödev Takip">
@@ -47,46 +46,24 @@
     body { background-color: var(--bg); color: var(--text); padding-bottom: 120px; transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .app { max-width: 600px; margin: 0 auto; padding: 16px; }
 
-    /* 🚀 SPLASH SCREEN */
+    /* SPLASH SCREEN */
     #splash-screen {
-      position: fixed;
-      inset: 0;
-      background: #000000;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+      position: fixed; inset: 0; background: #000000; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 24px; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
     }
-
     #splash-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
-
     .splash-title {
-      font-size: 32px;
-      font-weight: 900;
-      color: #ffffff;
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #ffffff, #8e8e93);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 32px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; text-transform: uppercase; margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #8e8e93); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-
     .splash-author { font-size: 14px; font-weight: 800; color: #0a84ff; letter-spacing: 2px; text-transform: uppercase; }
 
-    /* 📋 ONBOARDING MODAL */
-    #onboarding-screen {
-      position: fixed; inset: 0; background: var(--bg); z-index: 8000; display: flex; align-items: center; justify-content: center; padding: 20px;
-    }
-    .onboarding-card {
-      background: var(--card-solid); width: 100%; max-width: 440px; padding: 28px; border-radius: 28px; box-shadow: var(--shadow); border: 0.5px solid var(--border);
-    }
+    /* ONBOARDING MODAL */
+    #onboarding-screen { position: fixed; inset: 0; background: var(--bg); z-index: 8000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .onboarding-card { background: var(--card-solid); width: 100%; max-width: 440px; padding: 28px; border-radius: 28px; box-shadow: var(--shadow); border: 0.5px solid var(--border); }
 
-    /* ⏱️ SAYAÇ KARTI */
+    /* SAYAÇ KARTI */
     .countdown-card {
       background: linear-gradient(135deg, rgba(10, 132, 255, 0.12), rgba(52, 199, 89, 0.12));
       border: 0.5px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -140,7 +117,7 @@
     .progress-bar-fill { background: var(--accent); height: 100%; border-radius: 4px; transition: width 0.3s ease; }
     .progress-text { display: flex; justify-content: space-between; font-size: 11px; color: var(--sub-text); margin-top: 6px; font-weight: 700; }
 
-    /* 📝 NOTLAR KART TASARIMI */
+    /* NOTLAR KART TASARIMI */
     .note-card {
       background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
       border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 0.5px solid var(--border);
@@ -191,13 +168,13 @@
 </head>
 <body>
 
-  <!-- 🚀 AÇILIŞ EKRANI -->
+  <!-- AÇILIŞ EKRANI -->
   <div id="splash-screen">
     <div class="splash-title">ÖDEV TAKİP ÇİZELGESİ</div>
     <div class="splash-author">BY ATEŞ SEPETÇİ</div>
   </div>
 
-  <!-- 📋 KAYIT EKRANI -->
+  <!-- KAYIT EKRANI -->
   <div id="onboarding-screen" style="display: none;">
     <div class="onboarding-card">
       <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Hoş Geldin! 👋</h2>
@@ -234,7 +211,7 @@
   </div>
 
   <main class="app">
-    <!-- 🏠 ANA SAYFA -->
+    <!-- ANA SAYFA -->
     <section id="tab-home" class="tab-content active">
       <header class="header">
         <div>
@@ -273,7 +250,7 @@
       <div id="task-list"></div>
     </section>
 
-    <!-- 📝 NOTLARIM SEKMESİ (YENİ!) -->
+    <!-- NOTLARIM SEKMESİ -->
     <section id="tab-notes" class="tab-content">
       <header class="header">
         <div>
@@ -290,7 +267,7 @@
       <div id="notes-list"></div>
     </section>
 
-    <!-- 📊 İSTATİSTİK -->
+    <!-- İSTATİSTİK -->
     <section id="tab-stats" class="tab-content">
       <header class="header"><h1 class="app-title">İstatistikler</h1></header>
       
@@ -308,12 +285,12 @@
         <p style="color: var(--sub-text); font-weight: 500;" id="stats-detail">0 ödevden 0 tanesi tamamlandı.</p>
       </div>
 
-      <!-- 📲 WHATSAPP VELİ RAPORU BUTONU -->
+      <!-- WHATSAPP VELİ RAPORU BUTONU -->
       <button class="btn btn-green" onclick="sendWhatsAppReport()">📲 Veliye / Öğretmene WhatsApp Raporu Gönder</button>
       <button class="btn btn-danger" style="margin-top: 10px;" onclick="clearCompletedTasks()">🧹 Tamamlanan Ödevleri Temizle</button>
     </section>
 
-    <!-- ⚙️ AYARLAR -->
+    <!-- AYARLAR -->
     <section id="tab-settings" class="tab-content">
       <header class="header"><h1 class="app-title">Ayarlar</h1></header>
       <div class="summary-card" style="flex-direction:column; align-items:stretch; gap: 14px; cursor:default;">
@@ -323,7 +300,6 @@
         </div>
         <button class="btn btn-primary" onclick="toggleTheme()">🌙 Tema Değiştir</button>
         
-        <!-- 💾 YEDEKLEME BUTONLARI -->
         <button class="btn btn-primary" style="background: #30d158;" onclick="exportBackup()">💾 Verileri Yedekle (İndir)</button>
         <button class="btn btn-primary" style="background: #5856d6;" onclick="document.getElementById('file-import').click()">📥 Yedeği Geri Yükle</button>
         <input type="file" id="file-import" style="display:none" onchange="importBackup(event)" accept=".json">
@@ -333,7 +309,7 @@
     </section>
   </main>
 
-  <!-- ➕ ÖDEV EKLE MODAL -->
+  <!-- ÖDEV EKLE MODAL -->
   <div class="modal" id="add-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -351,14 +327,25 @@
         </div>
         <div class="form-group"><label>Yayın</label><input type="text" id="inp-publisher" class="form-control" placeholder="Örn: 345" required></div>
         <div class="form-group"><label>Konu</label><input type="text" id="inp-topic" class="form-control" placeholder="Örn: Paragraf / Üslü Sayılar" required></div>
-        <div class="form-group"><label>Sayfa veya Test Miktarı</label><input type="text" id="inp-range" class="form-control" placeholder="Örn: 100 150 veya 3 test" required></div>
+        
+        <!-- TEST / SAYFA / SORU TÜRÜ SEÇİMİ -->
+        <div class="form-group">
+          <label>Ödev Türü & Birimi</label>
+          <select id="inp-unit" class="form-control">
+            <option value="Sayfa">📄 Sayfa Bazlı (Örn: 10-15. Sayfalar)</option>
+            <option value="Test">🧪 Test Bazlı (Örn: 4 Test)</option>
+            <option value="Soru">❓ Soru Sayısı (Örn: 50 Soru)</option>
+          </select>
+        </div>
+
+        <div class="form-group"><label>Miktar / Aralık</label><input type="text" id="inp-range" class="form-control" placeholder="Örn: 5 (Test) veya 10-15 (Sayfa)" required></div>
         <div class="form-group"><label>Son Teslim Tarihi</label><input type="date" id="inp-due" class="form-control" required></div>
         <button type="submit" class="btn btn-primary">Kaydet</button>
       </form>
     </div>
   </div>
 
-  <!-- 📝 NOT EKLE MODAL -->
+  <!-- NOT EKLE MODAL -->
   <div class="modal" id="add-note-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -389,7 +376,7 @@
     </div>
   </div>
 
-  <!-- 👆 ÖDEV DETAY MODAL -->
+  <!-- ÖDEV DETAY MODAL -->
   <div class="modal" id="detail-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -422,8 +409,8 @@
   </nav>
 
   <script>
-    const DB_NAME = "odev_app_v4";
-    const NOTES_DB_NAME = "odev_notes_v4";
+    const DB_NAME = "odev_app_v5";
+    const NOTES_DB_NAME = "odev_notes_v5";
     let tasks = [];
     let notes = [];
     let selectedSubject = "Tümü";
@@ -569,7 +556,7 @@
       }
     }
 
-    /* 📝 NOT YÖNETİMİ */
+    /* NOT YÖNETİMİ */
     function renderNotes() {
       const container = document.getElementById('notes-list');
       const search = (document.getElementById('note-search-input').value || "").toLowerCase();
@@ -641,31 +628,62 @@
       renderNotes();
     }
 
-    /* 📲 WHATSAPP VELİ RAPORU */
+    /* 📲 TEST ENTEGRELİ VELİ RAPORU */
     function sendWhatsAppReport() {
       if (!tasks.length) { alert("Rapor gönderilecek ödev bulunamadı."); return; }
       const total = tasks.length;
-      const completed = tasks.filter(t => t.completed || t.completedCount >= t.totalCount).length;
+      const completedTasks = tasks.filter(t => t.completed || t.completedCount >= t.totalCount);
+      const completedCount = completedTasks.length;
       const overdue = tasks.filter(t => getTaskCategory(t) === 'overdue').length;
-      const pct = Math.round((completed / total) * 100);
+      const pct = Math.round((completedCount / total) * 100);
 
-      let text = `📊 *${userData ? userData.name : 'Öğrenci'} - ÖDEV TAKİP RAPORU*\n\n`;
-      text += `✅ *Tamamlanan:* ${completed} / ${total} (%${pct})\n`;
-      text += `🔴 *Geciken Ödevler:* ${overdue} Adet\n\n`;
-      text += `*Son Ödev Durumları:*\n`;
-
-      tasks.slice(0, 5).forEach(t => {
-        const status = t.completed ? "✅" : (getTaskCategory(t) === 'overdue' ? "❌" : "⏳");
-        text += `${status} ${t.subject} - ${t.topic} (${t.completedCount}/${t.totalCount})\n`;
+      // Türlerine göre (Test/Sayfa/Soru) toplam hesaplama
+      let totalPages = 0, totalTests = 0, totalQuestions = 0;
+      tasks.forEach(t => {
+        let count = (t.completed || t.completedCount >= t.totalCount) ? (t.totalCount || 10) : (t.completedCount || 0);
+        let unit = t.unit || "Sayfa";
+        if (unit === "Test") totalTests += count;
+        else if (unit === "Soru") totalQuestions += count;
+        else totalPages += count;
       });
 
-      text += `\n_Ateş Sepetçi Ödev Takip Sistemi ile Gönderildi._`;
+      let totalsSummary = [];
+      if (totalTests > 0) totalsSummary.push(`${totalTests} Test`);
+      if (totalPages > 0) totalsSummary.push(`${totalPages} Sayfa`);
+      if (totalQuestions > 0) totalsSummary.push(`${totalQuestions} Soru`);
+
+      const todayStr = new Date().toLocaleDateString('tr-TR');
+
+      let text = `🎓 *ÖĞRENCİ GELİŞİM VE ÖDEV RAPORU*\n`;
+      text += `👤 *Öğrenci:* ${userData ? userData.name : 'Ateş Sepetçi'}\n`;
+      text += `📆 *Tarih:* ${todayStr}\n\n`;
+      text += `──────────────────\n`;
+      text += `📊 *İSTATİSTİKLER*\n`;
+      text += `• *Ödev Başarı Oranı:* 🔥 %${pct}\n`;
+      text += `• *Tamamlanan Ödev:* ${completedCount} / ${total}\n`;
+      text += `• *Geciken Ödev:* ${overdue}\n`;
+      text += `• *Tamamlanan Toplam:* ${totalsSummary.join(' / ') || '0 Ödev'}\n`;
+      text += `──────────────────\n\n`;
+      text += `📚 *ÖDEV DETAYLARI*\n`;
+
+      tasks.forEach(t => {
+        const isDone = t.completed || t.completedCount >= t.totalCount;
+        const statusIcon = isDone ? "✅" : (getTaskCategory(t) === 'overdue' ? "❌" : "⏳");
+        const totalP = t.totalCount || 10;
+        const curP = isDone ? totalP : (t.completedCount || 0);
+        const unit = t.unit || "Sayfa";
+        const dateFormatted = t.dueDate ? t.dueDate.split('-').reverse().slice(0,2).join('/') : '-';
+
+        text += `• *${t.subject}* - ${t.topic} ➔ ${statusIcon} *${curP}/${totalP} ${unit}* (Son Tarih: ${dateFormatted})\n`;
+      });
+
+      text += `\n──────────────────\n`;
+      text += `_Ateş Sepetçi Ödev Takip Sistemi_`;
 
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank');
     }
 
-    /* 💾 VERİ YEDEKLEME */
     function exportBackup() {
       const data = { tasks, notes, userData };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -706,17 +724,15 @@
       }
     }
 
-    function parseAmountAndUnit(rangeStr) {
-      if (!rangeStr) return { total: 10, unit: "sayfa" };
-      const str = rangeStr.toLowerCase().trim();
-      const unit = str.includes("test") ? "test" : "sayfa";
-      const numbers = str.match(/\d+/g);
+    function parsePageCount(rangeStr) {
+      if (!rangeStr) return 10;
+      const numbers = rangeStr.match(/\d+/g);
       if (numbers && numbers.length >= 2) {
-        return { total: Math.abs(parseInt(numbers[1]) - parseInt(numbers[0])) + 1, unit };
+        return Math.abs(parseInt(numbers[1]) - parseInt(numbers[0])) + 1;
       } else if (numbers && numbers.length === 1) {
-        return { total: parseInt(numbers[0]), unit };
+        return parseInt(numbers[0]);
       }
-      return { total: 10, unit };
+      return 10;
     }
 
     function getTaskCategory(t) {
@@ -733,7 +749,7 @@
       if (t) {
         t.completed = !t.completed;
         if (t.completed) {
-          t.completedCount = t.totalCount;
+          t.completedCount = t.totalCount || 10;
           t.completedAt = new Date().toISOString().split('T')[0];
           confetti({ particleCount: 80, spread: 60, origin: { y: 0.8 } });
         } else {
@@ -795,9 +811,11 @@
       }
 
       container.innerHTML = filtered.map(t => {
-        const isDone = t.completed || t.completedCount >= t.totalCount;
-        const total = t.totalCount || 10, current = t.completedCount || 0;
+        const total = t.totalCount || 10;
+        const isDone = t.completed || t.completedCount >= total;
+        const current = isDone ? total : (t.completedCount || 0);
         const pct = Math.min(100, Math.round((current / total) * 100));
+        const unit = t.unit || "Sayfa";
 
         return `
           <div class="task-card ${isDone ? 'completed-card' : ''}">
@@ -811,12 +829,12 @@
               </div>
               <div class="task-title ${isDone ? 'strike' : ''}">${t.topic}</div>
               <div class="task-meta">
-                <span>📖 ${t.range}</span>
+                <span>📖 ${t.range} (${unit})</span>
                 <span>📅 ${(t.dueDate || '').split('-').reverse().slice(0,2).join('/')}</span>
               </div>
               <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%"></div></div>
               <div class="progress-text">
-                <span>${current} / ${total} ${t.unit || 'sayfa'}</span>
+                <span>${current} / ${total} ${unit.toLowerCase()}</span>
                 <span>%${pct}</span>
               </div>
             </div>
@@ -833,16 +851,17 @@
       const selectVal = document.getElementById('inp-subject').value;
       const finalSubject = selectVal === "OTHER_CUSTOM" ? (document.getElementById('inp-custom-subject').value.trim() || "Diğer") : selectVal;
       const range = document.getElementById('inp-range').value;
-      const parsed = parseAmountAndUnit(range);
+      const unit = document.getElementById('inp-unit').value;
+      const totalPages = parsePageCount(range);
 
       tasks.push({
         id: Date.now().toString(),
         subject: finalSubject,
         publisher: document.getElementById('inp-publisher').value,
         topic: document.getElementById('inp-topic').value,
+        unit: unit,
         range: range,
-        totalCount: parsed.total,
-        unit: parsed.unit,
+        totalCount: totalPages,
         completedCount: 0,
         dueDate: document.getElementById('inp-due').value,
         completed: false
@@ -859,8 +878,7 @@
       const t = tasks.find(x => x.id === id);
       if (!t) return;
       document.getElementById('det-title').innerText = `${t.subject} — ${t.topic}`;
-      document.getElementById('det-meta').innerText = `Yayın: ${t.publisher} • Son Tarih: ${t.dueDate}`;
-      document.getElementById('det-input-label').innerText = `TAMAMLANAN ${(t.unit || 'sayfa').toUpperCase()} SAYISI`;
+      document.getElementById('det-meta').innerText = `Yayın: ${t.publisher} • Birim: ${t.unit || 'Sayfa'} • Son Tarih: ${t.dueDate}`;
       document.getElementById('det-completed').value = t.completedCount || 0;
       document.getElementById('detail-modal').classList.add('active');
     }
