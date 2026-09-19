@@ -164,7 +164,86 @@
 
     .color-picker { display: flex; gap: 10px; margin-top: 6px; }
     .color-opt { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-    .color-opt.selected { border-color: var(--text); }
+    .color-opt.selected { border-color: var(--text); } 
+    /* ÖĞRETMEN MODÜLÜ STİLLERİ */
+.badge-pro {
+  background: linear-gradient(135deg, #FFD60A, #FF9F0A);
+  color: #000000;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+
+.tabs {
+  display: flex;
+  background: rgba(120, 120, 128, 0.24);
+  padding: 3px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  background: transparent;
+  color: var(--sub-text, #8e8e93);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: #636366;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.class-item {
+  background: rgba(44, 44, 46, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.class-code-badge {
+  background: rgba(10, 132, 255, 0.2);
+  color: #64d2ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.class-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-sm {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-assign { background: #5e5ce6; color: #fff; }
+.btn-wa { background: #30d158; color: #000; }
   </style>
 </head>
 <body>
@@ -319,7 +398,39 @@
       </div>
     </section>
   </main>
+<!-- 👨‍🏫 ÖĞRETMEN & KURUM (SINIF YÖNETİMİ) MODÜLÜ -->
+<div class="card">
+  <div class="card-title-group">
+    <div class="card-title">👨‍🏫 Öğretmen & Sınıf Modülü</div>
+    <span class="badge-pro">PRO KURUMSAL</span>
+  </div>
 
+  <div class="tabs">
+    <button id="btnTabJoin" class="tab-btn active" onclick="switchTeacherTab('join')">👨‍🎓 Sınıfa Katıl</button>
+    <button id="btnTabCreate" class="tab-btn" onclick="switchTeacherTab('create')">👨‍🏫 Sınıf Yönetimi</button>
+  </div>
+
+  <!-- ÖĞRENCİ SEKMESİ -->
+  <div id="tabJoinStudent" class="tab-content active">
+    <p style="font-size: 13px; color: var(--sub-text); margin-bottom: 12px;">Öğretmeninizin verdiği 6 haneli sınıf kodunu girerek ödevleri anlık alın:</p>
+    <div class="input-group">
+      <input type="text" id="studentClassCodeInput" placeholder="Örn: MTM842" maxlength="6" style="text-transform: uppercase;">
+      <button class="btn btn-primary" style="width: auto; padding: 0 16px;" onclick="joinClassByCode()">Katıl 🚀</button>
+    </div>
+    <div id="activeConnectedClass"></div>
+  </div>
+
+  <!-- ÖĞRETMEN SEKMESİ -->
+  <div id="tabCreateTeacher" class="tab-content">
+    <div class="input-stack">
+      <input type="text" id="newClassNameInput" placeholder="Sınıf Adı (Örn: 8-A LGS Grubu)">
+      <input type="text" id="newClassSubjectInput" placeholder="Ders (Örn: Matematik)">
+      <button class="btn btn-success" onclick="createNewClassAction()">+ Sınıf Oluştur ve Kod Üret</button>
+    </div>
+
+    <div id="classListContainer"></div>
+  </div>
+</div>
   <!-- ÖDEV EKLE / DÜZENLE MODAL -->
   <div class="modal" id="add-modal">
     <div class="modal-content">
@@ -1071,7 +1182,174 @@
         }
       };
       reader.readAsText(file);
+    } 
+    // --- ÖĞRETMEN & SINIF YÖNETİMİ MANTIĞI ---
+const TeacherModule = {
+  classes: JSON.parse(localStorage.getItem('teacher_classes')) || [],
+  connectedClass: JSON.parse(localStorage.getItem('student_connected_class')) || null,
+
+  generateCode(className) {
+    const clean = className.replace(/[^a-zA-Z0-9]/g, '');
+    const prefix = clean.substring(0, 3).toUpperCase() || 'ODV';
+    const num = Math.floor(100 + Math.random() * 900);
+    return `${prefix}${num}`;
+  },
+
+  createClass(name, subject) {
+    if (!name || !subject) {
+      alert('Lütfen sınıf adı ve ders bilgisini doldurun!');
+      return null;
     }
+    const newClass = {
+      id: 'cls_' + Date.now(),
+      code: this.generateCode(name),
+      name: name,
+      subject: subject,
+      assignments: []
+    };
+    this.classes.push(newClass);
+    this.save();
+    return newClass;
+  },
+
+  addAssignmentToClass(classCode, title, dueDate) {
+    const cls = this.classes.find(c => c.code === classCode);
+    if (!cls) return false;
+
+    cls.assignments.push({
+      id: 'hw_' + Date.now(),
+      title: title,
+      dueDate: dueDate,
+      createdAt: new Date().toLocaleDateString('tr-TR')
+    });
+    this.save();
+    return true;
+  },
+
+  getWhatsAppLink(classCode) {
+    const cls = this.classes.find(c => c.code === classCode);
+    if (!cls) return '#';
+
+    let text = `📚 *${cls.name.toUpperCase()} - ${cls.subject.toUpperCase()} HAFTALIK ÖDEV RAPORU*\n`;
+    text += `Sınıf Kodu: *${cls.code}*\n`;
+    text += `Tarih: ${new Date().toLocaleDateString('tr-TR')}\n`;
+    text += `-----------------------------------\n\n`;
+
+    if (cls.assignments.length === 0) {
+      text += `📌 Bu hafta henüz ödev tanımlanmadı.`;
+    } else {
+      text += `📌 *Aktif Ödev Listesi:*\n`;
+      cls.assignments.forEach((hw, i) => {
+        text += `${i + 1}. ${hw.title} (Son Teslim: ${hw.dueDate})\n`;
+      });
+    }
+
+    text += `\n🎯 *Öğretmen Notu:* Lütfen öğrencilerimizin günlük takibini aksatmayalım.`;
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  },
+
+  save() {
+    localStorage.setItem('teacher_classes', JSON.stringify(this.classes));
+    localStorage.setItem('student_connected_class', JSON.stringify(this.connectedClass));
+  }
+};
+
+function switchTeacherTab(tab) {
+  document.getElementById('tabJoinStudent').classList.remove('active');
+  document.getElementById('tabCreateTeacher').classList.remove('active');
+  document.getElementById('btnTabJoin').classList.remove('active');
+  document.getElementById('btnTabCreate').classList.remove('active');
+
+  if (tab === 'join') {
+    document.getElementById('tabJoinStudent').classList.add('active');
+    document.getElementById('btnTabJoin').classList.add('active');
+  } else {
+    document.getElementById('tabCreateTeacher').classList.add('active');
+    document.getElementById('btnTabCreate').classList.add('active');
+    renderClassList();
+  }
+}
+
+function createNewClassAction() {
+  const nameInput = document.getElementById('newClassNameInput');
+  const subjectInput = document.getElementById('newClassSubjectInput');
+
+  const created = TeacherModule.createClass(nameInput.value.trim(), subjectInput.value.trim());
+  if (created) {
+    nameInput.value = '';
+    subjectInput.value = '';
+    renderClassList();
+    alert(`Sınıf Oluşturuldu!\nSınıf Kodu: ${created.code}`);
+  }
+}
+
+function renderClassList() {
+  const container = document.getElementById('classListContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (TeacherModule.classes.length === 0) {
+    container.innerHTML = '<p style="font-size:13px; color:var(--sub-text, #8e8e93); margin-top:10px;">Henüz oluşturulmuş bir sınıf yok.</p>';
+    return;
+  }
+
+  TeacherModule.classes.forEach(cls => {
+    const card = document.createElement('div');
+    card.className = 'class-item';
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong>${cls.name} (${cls.subject})</strong>
+        <span class="class-code-badge">${cls.code}</span>
+      </div>
+      <div style="font-size:12px; color:var(--sub-text, #8e8e93); margin-top:6px;">
+        Toplam Tanımlı Ödev: ${cls.assignments.length}
+      </div>
+      <div class="class-actions">
+        <button class="btn-sm btn-assign" onclick="promptAddAssignment('${cls.code}')">+ Ödev Ekle</button>
+        <a href="${TeacherModule.getWhatsAppLink(cls.code)}" target="_blank" class="btn-sm btn-wa">📲 Veli Raporu</a>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function promptAddAssignment(code) {
+  const title = prompt('Ödev / Kaynak Adı:');
+  const dueDate = prompt('Son Teslim Tarihi (Örn: Cuma 17:00):');
+  if (title && dueDate) {
+    TeacherModule.addAssignmentToClass(code, title, dueDate);
+    renderClassList();
+    alert('Ödev sınıfa başarıyla eklendi!');
+  }
+}
+
+function joinClassByCode() {
+  const input = document.getElementById('studentClassCodeInput');
+  const code = input.value.trim().toUpperCase();
+  if (!code) {
+    alert('Geçerli bir sınıf kodu girin!');
+    return;
+  }
+  TeacherModule.connectedClass = code;
+  TeacherModule.save();
+  updateConnectedClassUI();
+}
+
+function updateConnectedClassUI() {
+  const container = document.getElementById('activeConnectedClass');
+  if (container && TeacherModule.connectedClass) {
+    container.innerHTML = `
+      <p style="color:var(--green, #30d158); font-size:13px; margin-top:10px; font-weight:600;">
+        ✅ <b>${TeacherModule.connectedClass}</b> kodlu sınıfa bağlandınız.
+      </p>
+    `;
+  }
+}
+
+// Sayfa yüklendiğinde bağlanan sınıfı göster
+window.addEventListener('load', () => {
+  updateConnectedClassUI();
+});
   </script>
 </body>
 </html>
