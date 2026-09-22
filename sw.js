@@ -6,7 +6,7 @@ const ASSETS = [
   './icon.png'
 ];
 
-// Service Worker Installation: Caching core static assets
+// Event: Install - Pre-cache critical application assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Service Worker Activation: Cleaning up outdated caches
+// Event: Activate - Purge stale cache storage versions
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Interception: Cache-first strategy with network fallback
+// Event: Fetch - Intercept requests with cache-first and network-fallback strategy
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
