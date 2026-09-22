@@ -6,6 +6,7 @@ const ASSETS = [
   './icon.png'
 ];
 
+// Service Worker Yükleme ve Dosyaları Önbelleğe Alma (Caching)
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -15,6 +16,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+// Eski Önbellekleri Temizleme (Activation)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -30,6 +32,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Ağ İsteklerini Yakalama ve Çevrimdışı Desteği (Fetch Handling)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
