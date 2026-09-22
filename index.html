@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ödev Takip Pro - Ultimate Edition</title>
 <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#000000">
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('SW Başarılı!', reg))
-        .catch(err => console.log('SW Hata:', err));
+        .then(reg => console.log('Service Worker Aktif!', reg))
+        .catch(err => console.log('Service Worker Hatası:', err));
     });
   }
 </script>
