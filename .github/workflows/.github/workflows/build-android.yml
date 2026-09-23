@@ -29,4 +29,8 @@ jobs:
         run: |
           bubblewrap init --manifest=https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json
           sed -i 's/"minSdkVersion": 23/"minSdkVersion": 24/g' twa-manifest.json || true
-          bubblewrap build
+          bubblewrap build- name: Upload AAB
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: app/build/outputs/bundle/release/*.aab
