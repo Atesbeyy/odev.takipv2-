@@ -1,4 +1,4 @@
-name: Build Android AAB (SDK 24)
+name: Build Android AAB
 
 on:
   push:
@@ -9,28 +9,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Setup Java
+      - name: Setup Java (JDK 17)
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Install Bubblewrap
+      - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
-      - name: Generate TWA Project & Build
+      - name: Generate and Build TWA
         run: |
-          bubblewrap init --manifest=https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json
+          bubblewrap init --manifest=https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json --directory=.
           sed -i 's/"minSdkVersion": 23/"minSdkVersion": 24/g' twa-manifest.json || true
-          bubblewrap build- name: Upload AAB
+          bubblewrap build
+
+      - name: Upload Generated AAB
         uses: actions/upload-artifact@v3
         with:
           name: app-release
-          path: app/build/outputs/bundle/release/*.aab
+          path: '*.aab'
