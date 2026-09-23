@@ -34,4 +34,5 @@
       "url": "./index.html"
     }
   ]
-}
+"min_sdk_version": 24,
+"minSdkVersion": 24}
