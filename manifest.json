@@ -33,5 +33,12 @@
       "description": "Hızlıca yeni ödev ekle",
       "url": "./index.html"
     }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "io.github.atesbeyy.twa",
+      "min_version": "24"
+    }
   ]
 }
