@@ -23,9 +23,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
@@ -42,7 +39,7 @@ jobs:
               twa.appVersionName = "1.0.1";
               twa.packageId = "io.github.atesbeyy.twa";
               fs.writeFileSync("twa-manifest.json", JSON.stringify(twa, null, 2));
-              console.log("Updated twa-manifest.json successfully.");
+              console.log("twa-manifest.json guncellendi: minSdkVersion=24, targetSdkVersion=35, versionCode=2");
             }
           '
           find . -name "build.gradle*" -exec sed -i 's/minSdkVersion 23/minSdkVersion 24/g' {} + || true
