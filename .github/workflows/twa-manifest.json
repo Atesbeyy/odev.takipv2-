@@ -1,0 +1,46 @@
+{
+  "packageId": "io.github.atesbeyy.twa",
+  "host": "atesbeyy.github.io",
+  "name": "Ödev Takip ve Çalışma Programı",
+  "launcherName": "ÖdevTakip",
+  "themeColor": "#000000",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#000000",
+  "enableNotifications": true,
+  "startUrl": "/odev.takipv2-/",
+  "iconUrl": "https://raw.githubusercontent.com/Atesbeyy/odev.takipv2-/main/icon.png",
+  "maskableIconUrl": "https://raw.githubusercontent.com/Atesbeyy/odev.takipv2-/main/icon.png",
+  "appVersionName": "1.0.1",
+  "appVersionCode": 2,
+  "shortcuts": [],
+  "webManifestUrl": "https://raw.githubusercontent.com/Atesbeyy/odev.takipv2-/main/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": false
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "minSdkVersion": 24,
+  "targetSdkVersion": 35,
+  "orientation": "portrait",
+  "fingerprints": [
+    {
+      "value": "ED:D5:27:A6:9A:A0:D9:5A:AD:3D:C0:5E:46:E0:05:AC:E0:B3:53:24:DF:DF:AC:B6:7E:D2:21:06:66:72:BA:77"
+    }
+  ],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}
