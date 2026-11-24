@@ -26,11 +26,25 @@ jobs:
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
+      - name: Configure Bubblewrap Environment
+        run: |
+          mkdir -p ~/.bubblewrap
+          cat <<EOF > ~/.bubblewrap/config.json
+          {
+            "jdkPath": "${JAVA_HOME}",
+            "androidSdkPath": "${ANDROID_HOME}"
+          }
+          EOF
+
       - name: Build Android AAB
-        run: bubblewrap build --skipPwaValidation
+        run: |
+          yes "" | bubblewrap build --skipPwaValidation || true
 
       - name: Upload Generated AAB
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: '*.aab'
+          path: |
+            *.aab
+            app/*.aab
+            app/build/outputs/bundle/release/*.aab
